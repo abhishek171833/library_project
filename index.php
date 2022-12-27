@@ -25,7 +25,7 @@
         $res=mysqli_query($db,"SELECT * FROM `student` WHERE Email='$_POST[lemail]' && Password='$_POST[lpassword]';");
         $count=mysqli_num_rows($res);
 
-        if($count){
+        if($count):
             $_SESSION['login_user'] = $_POST['lemail'];?>
             <script>
                 setTimeout(() => {
@@ -34,21 +34,23 @@
                 // window.location="index.php"
             </script>
             
-            <?php }
-        else{
-            ?>
+            <?php else:?>
             <script>
                 setTimeout(() => {
                     swal("Error!", "Email Or Password Does Not Match!", "error");
                 }, 1000);
             </script>
-        <?php }
+        <?php  endif;
         }
 
-
-
         if(isset($_POST['name'])){
-            require("./db/conn.php");
+            require('./db/conn.php');
+            $res=mysqli_query($db,"SELECT Email FROM `student` WHERE Email='$_POST[email]';");
+            $email=mysqli_num_rows($res);
+
+            
+            $res=mysqli_query($db,"SELECT Contact FROM `student` WHERE Contact='$_POST[phone]';");
+            $phone=mysqli_num_rows($res);
 
             if($_POST['password'] != $_POST['cpassword']):?>
                 <script>
@@ -58,13 +60,8 @@
                 </script>
 
             <?php 
-            $sql = "SELECT Email FROM `student` WHERE Email='$_POST[email]';";
-            print_r($db);
-            die;
-              $res=mysqli_query($db,$sql);
-              $count=mysqli_num_rows($res);
 
-            elseif($count):?>
+            elseif ($email): ?>
                 <script>
                     setTimeout(() => {
                         swal("Warning!", "User With This Email Already Exists!", "warning");
@@ -72,10 +69,8 @@
                 </script>
             <?php 
 
-            $res=mysqli_query($db,"SELECT phone FROM `student` WHERE Contact='$_POST[phone]';");
-            $count=mysqli_num_rows($res);
 
-            elseif($count): ?>
+            elseif($phone): ?>
                 <script>
                     setTimeout(() => {
                         swal("Warning!", "User With This Phone Number Already Exists!", "warning");
