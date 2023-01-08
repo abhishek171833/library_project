@@ -29,7 +29,6 @@
         require('./db/conn.php');
         $res=mysqli_query($db,"SELECT * FROM `student` WHERE Email='$_POST[lemail]' && Password='$_POST[lpassword]';");
         $count=mysqli_num_rows($res);
-
         if($count):
             $_SESSION['login_user'] = $_POST['lemail']; ?>
 
