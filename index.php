@@ -108,11 +108,9 @@
                     <ul class="navbar-nav ms-auto">
                         <li class="nav-item"><a class="nav-link" href="#home">Home</a></li>
                         <li class="nav-item"><a class="nav-link" href="#footer">Contact</a></li>
-                        <?php
-                            if(isset($_SESSION['login_user'])){?>
+                        <?php if(isset($_SESSION['login_user'])){?>
                         <a class="nav-link" style="cursor:pointer;" href="logout.php">Logout</a>
-                        <?php }
-                         else { ?>
+                        <?php } else { ?>
                             <a class="nav-link" style="cursor:pointer;" data-bs-toggle="modal" data-bs-target="#loginModal">Log In</a>
                         <a class="nav-link" style="cursor:pointer;" data-bs-toggle="modal" data-bs-target="#signupModal">Sign Up</a>
                         <?php }?>

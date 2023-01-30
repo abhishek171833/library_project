@@ -30,6 +30,23 @@
             } );
         </script>
     </head>
+    <?php if(isset($_POST['book_id'])){
+            require('./db/conn.php');
+            session_start();
+            $user_email = $_SESSION['login_user'];
+            $result = mysqli_query($db,"select user_id from users");
+            $user_id = $result->fetch_row()[0];
+            mysqli_query($db,"INSERT INTO `orders` (`user_id`, `book_id`, `datetime`) VALUES ('$user_id', '$_POST[book_id]', current_timestamp());");
+            unset($_POST['book_id']);
+            ?>
+            <script>
+                setTimeout(() => {
+                    swal("Success!", "Book Orderd Successfully", "success")
+                }, 1000);
+            </script>
+        <?php } ?>
+    <?php ?>
+
     <?php 
     session_start();
     if(isset($_SESSION['login_user'])){ ?>
@@ -42,10 +59,11 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <!-- <form action="./index.php" method="post"> -->
+                <form action="./books.php" method="post" onsubmit="return false;">
+                    <input type="hidden" id="book_id" name="book_id">
                     <div class="mb-3">
-                        <label for="lemail" class="form-label">Book Name</label>
-                        <input type="email" class="form-control" id="lemail" aria-describedby="emailHelp" name="book" value="Bhagvatgita" disabled>
+                        <label for="book_name" class="form-label">Book Name</label>
+                        <input type="text" class="form-control" id="book_name" aria-describedby="emailHelp" name="book_name" disabled>
                     </div>
                     
                     <div class="row">
@@ -53,14 +71,14 @@
                             <div class="input-group-prepend mb-1">
                                 <span class="input-group-text" id="basic-addon1">From</span>
                             </div>
-                            <input class="form-control" id="datepicker">
+                            <input class="form-control" id="datepicker" name="from_date">
                         </div>
     
                         <div class="col-md-6 mb-2">
                             <div class="input-group-prepend mb-1">
                                 <span class="input-group-text" id="basic-addon1">To</span>
                             </div>
-                            <input class="form-control" id="datepicker2">
+                            <input class="form-control" id="datepicker2" name="to_date">
                         </div>
                     </div>
 
@@ -68,7 +86,7 @@
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                         <button id="order-book" class="btn btn-primary">Order Book</button>
                     </div>
-                <!-- </form> -->
+                </form>
             </div>
             </div>
         </div>
@@ -104,6 +122,11 @@
             <div class="container">
                 <a href="welcome.php" class="btn btn-primary m-4">&#x2190; Back</a>
                 <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3 m-4">
+                <?php 
+                    require('db/conn.php');
+                    $sql = "select * from books;";
+                    $query = mysqli_query($db, $sql);
+                    while ($row = mysqli_fetch_assoc($query)){?>
                     <div class="col-md-4">
                         <div class="card shadow-sm">
                             <svg class="bd-placeholder-img card-img-top" width="100%" height="225"
@@ -114,156 +137,24 @@
                                     dy=".3em">Thumbnail</text>
                             </svg>
                             <div class="card-body">
-                                <p class="card-text">Book Name</p>
+                                <p class="card-text">Book Name : <?= $row['book_name'] ?></p>
+                                <p class="card-text">Status :<?php if($row['status']){echo "Available";}else{echo"Unavailable";}?></p>
                                 <div class="d-flex justify-content-between align-items-center">
+                                <?php if(!$row['status']){?>
                                     <div class="btn-group">
-                                        <button  data-bs-toggle="modal" data-bs-target="#bookModal" type="button" class="btn btn-sm btn-outline-secondary">Oder book</button>
+                                        <button data-id="<?= $row['id']?>" type="button" class="p-3 btn btn-sm btn-outline-secondary order-button bg-danger text-light" disabled>Book Is Unavailable</button>
                                     </div>
+                                <?php } else { ?>
+                                    <div class="btn-group">
+                                        <button data-name="<?= $row['book_name']?>" data-bs-toggle="modal" data-bs-target="#bookModal" data-id="<?= $row['id']?>" type="button" class="p-3 text-light bg-success btn btn-sm btn-outline-secondary order-button">Oder book</button>
+                                    </div>
+                                <?php } ?>
                                     <small class="text-muted">9 mins</small>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-4">
-                        <div class="card shadow-sm">
-                            <svg class="bd-placeholder-img card-img-top" width="100%" height="225"
-                                xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail"
-                                preserveAspectRatio="xMidYMid slice" focusable="false">
-                                <title>Placeholder</title>
-                                <rect width="100%" height="100%" fill="#55595c"></rect><text x="50%" y="50%" fill="#eceeef"
-                                    dy=".3em">Thumbnail</text>
-                            </svg>
-                            <div class="card-body">
-                                <p class="card-text">Book Name</p>
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <div class="btn-group">
-                                        <button type="button" class="btn btn-sm btn-outline-secondary">Oder book</button>
-                                    </div>
-                                    <small class="text-muted">9 mins</small>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="card shadow-sm">
-                            <svg class="bd-placeholder-img card-img-top" width="100%" height="225"
-                                xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail"
-                                preserveAspectRatio="xMidYMid slice" focusable="false">
-                                <title>Placeholder</title>
-                                <rect width="100%" height="100%" fill="#55595c"></rect><text x="50%" y="50%" fill="#eceeef"
-                                    dy=".3em">Thumbnail</text>
-                            </svg>
-                            <div class="card-body">
-                                <p class="card-text">Book Name</p>
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <div class="btn-group">
-                                        <button type="button" class="btn btn-sm btn-outline-secondary">Oder book</button>
-                                    </div>
-                                    <small class="text-muted">9 mins</small>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="card shadow-sm">
-                            <svg class="bd-placeholder-img card-img-top" width="100%" height="225"
-                                xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail"
-                                preserveAspectRatio="xMidYMid slice" focusable="false">
-                                <title>Placeholder</title>
-                                <rect width="100%" height="100%" fill="#55595c"></rect><text x="50%" y="50%" fill="#eceeef"
-                                    dy=".3em">Thumbnail</text>
-                            </svg>
-                            <div class="card-body">
-                                <p class="card-text">Book Name</p>
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <div class="btn-group">
-                                        <button type="button" class="btn btn-sm btn-outline-secondary">Oder book</button>
-                                    </div>
-                                    <small class="text-muted">9 mins</small>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="card shadow-sm">
-                            <svg class="bd-placeholder-img card-img-top" width="100%" height="225"
-                                xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail"
-                                preserveAspectRatio="xMidYMid slice" focusable="false">
-                                <title>Placeholder</title>
-                                <rect width="100%" height="100%" fill="#55595c"></rect><text x="50%" y="50%" fill="#eceeef"
-                                    dy=".3em">Thumbnail</text>
-                            </svg>
-                            <div class="card-body">
-                                <p class="card-text">Book Name</p>
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <div class="btn-group">
-                                        <button type="button" class="btn btn-sm btn-outline-secondary">Oder book</button>
-                                    </div>
-                                    <small class="text-muted">9 mins</small>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="card shadow-sm">
-                            <svg class="bd-placeholder-img card-img-top" width="100%" height="225"
-                                xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail"
-                                preserveAspectRatio="xMidYMid slice" focusable="false">
-                                <title>Placeholder</title>
-                                <rect width="100%" height="100%" fill="#55595c"></rect><text x="50%" y="50%" fill="#eceeef"
-                                    dy=".3em">Thumbnail</text>
-                            </svg>
-                            <div class="card-body">
-                                <p class="card-text">Book Name</p>
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <div class="btn-group">
-                                        <button type="button" class="btn btn-sm btn-outline-secondary">Oder book</button>
-                                    </div>
-                                    <small class="text-muted">9 mins</small>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="card shadow-sm">
-                            <svg class="bd-placeholder-img card-img-top" width="100%" height="225"
-                                xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail"
-                                preserveAspectRatio="xMidYMid slice" focusable="false">
-                                <title>Placeholder</title>
-                                <rect width="100%" height="100%" fill="#55595c"></rect><text x="50%" y="50%" fill="#eceeef"
-                                    dy=".3em">Thumbnail</text>
-                            </svg>
-                            <div class="card-body">
-                                <p class="card-text">Book Name</p>
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <div class="btn-group">
-                                        <button type="button" class="btn btn-sm btn-outline-secondary">Oder book</button>
-                                    </div>
-                                    <small class="text-muted">9 mins</small>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="card shadow-sm">
-                            <svg class="bd-placeholder-img card-img-top" width="100%" height="225"
-                                xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail"
-                                preserveAspectRatio="xMidYMid slice" focusable="false">
-                                <title>Placeholder</title>
-                                <rect width="100%" height="100%" fill="#55595c"></rect><text x="50%" y="50%" fill="#eceeef"
-                                    dy=".3em">Thumbnail</text>
-                            </svg>
-                            <div class="card-body">
-                                <p class="card-text">Book Name</p>
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <div class="btn-group">
-                                        <button type="button" class="btn btn-sm btn-outline-secondary">Oder book</button>
-                                    </div>
-                                    <small class="text-muted">9 mins</small>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                    <?php } ?>
                 </div>
             </div>
         </div>
@@ -282,9 +173,25 @@
 </script>
 <?php }?>
 <script>
-    let order_book = document.getElementById("order-book")
-    order_book.addEventListener("click",function(){
-        let val = document.getElementById("datepicker")
-        console.log(parseInt(val.value.substr(3,6)))
-    })
+    document.addEventListener("DOMContentLoaded", () => {
+        let order_button = document.querySelectorAll(".order-button")
+        order_button.forEach(element => {
+            element.addEventListener("click",function(){
+                console.log("abhishek")
+                let id = this.getAttribute('data-id')
+                let book = this.getAttribute('data-name')
+                let book_id = this.getAttribute('data-id')
+                let book_name = document.getElementById("book_name")
+                let book_id_el = document.getElementById("book_id")
+                book_name.value = book
+                book_id_el.value = book_id
+
+            })
+        });
+        let order_book = document.getElementById("order-book")
+        order_book.addEventListener("click",function(){
+            let val = document.getElementById("datepicker")
+            console.log(parseInt(val.value.substr(3,6)))
+        })
+    });
 </script>
