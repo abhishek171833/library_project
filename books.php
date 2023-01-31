@@ -202,7 +202,7 @@
             <script>
                 setTimeout(() => {
                     swal("Success!", "Book Orderd Successfully", "success")
-                }, 1000);
+                },);
             </script>
         <?php } ?>
 <?php ?>

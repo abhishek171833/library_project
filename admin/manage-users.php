@@ -10,14 +10,10 @@
         <link href="https://cdn.jsdelivr.net/npm/simple-datatables@latest/dist/style.css" rel="stylesheet" />
         <link href="css/styles.css" rel="stylesheet" />
         <script src="https://use.fontawesome.com/releases/v6.1.0/js/all.js" crossorigin="anonymous"></script>
-        <style>
-            .select{
-                cursor:pointer;
-            }
-        </style>
+        <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
     </head>
     <body class="sb-nav-fixed">
-         <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark justify-content-between">
+        <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark justify-content-between">
             <div class="d-flex">
                 <a class="navbar-brand ps-3" href="index.html">Library Management</a>
                 <!-- Sidebar Toggle-->
@@ -53,28 +49,37 @@
                                 Dashboard
                             </a>
                             <div class="sb-sidenav-menu-heading">Admin Settings</div>
-                            <a class="nav-link collapsed active" href="#" data-bs-toggle="collapse" data-bs-target="#collapseLayouts" aria-expanded="false" aria-controls="collapseLayouts">
+                            <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseLayouts" aria-expanded="false" aria-controls="collapseLayouts">
                                 <div class="sb-nav-link-icon"><i class="fas fa-columns"></i></div>
                                 Books
                                 <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
                             </a>
-                            <div class="collapse show" id="collapseLayouts" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
+                            <div class="collapse" id="collapseLayouts" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
                                 <nav class="sb-sidenav-menu-nested nav">
                                     <a class="nav-link" href="add-book.php">Add Book</a>
-                                    <a class="nav-link" href="manage-books.php">Manage Books</a>
-                                    <a class="nav-link active" href="manage-orders.php">Manage Book Orders</a>
+                                    <a class="nav-link active" href="manage-books.php">Manage Books</a>
+                                    <a class="nav-link" href="manage-orders.php">Manage Book Orders</a>
                                 </nav>
                             </div>
-                            <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapsePages" aria-expanded="false" aria-controls="collapsePages">
+                            <a class="nav-link collapsed active" href="#" data-bs-toggle="collapse" data-bs-target="#collapsePages" aria-expanded="false" aria-controls="collapsePages">
                                 <div class="sb-nav-link-icon"><i class="fas fa-book-open"></i></div>
                                 Users
                                 <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
                             </a>
-                            <div class="collapse" id="collapsePages" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
+                            <div class="collapse show" id="collapsePages" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
                                 <nav class="sb-sidenav-menu-nested nav">
-                                    <a class="nav-link" href="manage-users.php">Manage Users</a>
+                                    <a class="nav-link active" href="manage-users.php">Manage Users</a>
                                 </nav>
                             </div>
+                            <!-- <div class="sb-sidenav-menu-heading">Addons</div>
+                            <a class="nav-link" href="charts.html">
+                                <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
+                                Charts
+                            </a>
+                            <a class="nav-link" href="tables.html">
+                                <div class="sb-nav-link-icon"><i class="fas fa-table"></i></div>
+                                Tables
+                            </a> -->
                         </div>
                     </div>
                     <div class="sb-sidenav-footer">
@@ -85,7 +90,7 @@
             <div id="layoutSidenav_content">
                 <main>
                     <div class="container-fluid px-4">
-                        <h1 class="mt-4">Manage Book Orders</h1>
+                        <h1 class="mt-4">Manage Users</h1>
                         <!-- <ol class="breadcrumb mb-4">
                             <li class="breadcrumb-item"><a href="index.html">Dashboard</a></li>
                             <li class="breadcrumb-item active">Tables</li>
@@ -100,52 +105,42 @@
                         <div class="card mb-4">
                             <div class="card-header">
                                 <i class="fas fa-table me-1"></i>
-                                Manage book orders
+                                Manage Users
                             </div>
                             <div class="card-body">
                                 <table id="datatablesSimple">
                                     <thead>
                                         <tr>
-                                            <th>Order Id</th>
-                                            <th>User</th>
-                                            <th>Book Name</th>
-                                            <th>From</th>
-                                            <th>To</th>
-                                            <th>Status</th>
+                                            <th>User Id</th>
+                                            <th>First Name</th>
+                                            <th>Last Name</th>
+                                            <th>User Name</th>
+                                            <th>Phone No</th>
+                                            <th>Email Address</th>
+                                            <th>Password</th>
                                         </tr>
                                     </thead>
                                     <tbody>
+
                                     <?php 
                                     require('db/conn.php');
-                                    $sql = "select * from orders;";
+                                    $sql = "select * from users;";
                                     $query2 = mysqli_query($db, $sql);
                                     $query = mysqli_query($db, $sql);
                                     $row2 = mysqli_fetch_assoc($query2);
                                     if(!$row2){ ?>
-                                        <div class="col-md-12">Oops!No Orders Found <a href="books.php">click here to order book </a> </div>
+                                        <div class="col-md-12">Oops!No Users Found </div>
                                     <?php }
                                     else{
                                         while ($row = mysqli_fetch_assoc($query)){ ?>
                                         <tr>
-                                            <td><?=$row['id']?></td>
-                                            <?php 
-                                            $result = mysqli_query($db,"select email_address from users where user_id = $row[user_id];");
-                                            $username = $result->fetch_row()[0]; ?>
-                                            <td><?=$username?></td>
-                                            <?php 
-                                            $result = mysqli_query($db,"select book_name from books where id = $row[book_id];");
-                                            $book_name = $result->fetch_row()[0]; ?>
-                                            <td><?=$book_name?></td>
-                                            <td><?=$row['from_date']?></td>
-                                            <td><?=$row['to_date']?></td>
-                                            <td>
-
-                                            <select class="form-select select" name="status" id="">
-                                                <option value="1">Approve</option>
-                                                <option value="1">Pending</option>
-                                                <option value="1">Deline</option>
-                                            </select>
-                                            </td>
+                                            <td><?=$row['user_id']?></td>
+                                            <td><?=$row['first_name']?></td>
+                                            <td><?=$row['last_name']?></td>
+                                            <td><?=$row['Username']?></td>
+                                            <td><?=$row['phone_no']?></td>
+                                            <td><?=$row['email_address']?></td>
+                                            <td><?=$row['Password']?></td>
                                         </tr>
                                         <?php } }?>
                                     </tbody>
@@ -157,7 +152,12 @@
                 <footer class="py-4 bg-light mt-auto">
                     <div class="container-fluid px-4">
                         <div class="d-flex align-items-center justify-content-between small">
-                            <div class="text-muted">Copyright &copy; Library Management 2023</div>
+                            <div class="text-muted">Copyright &copy; Your Website 2022</div>
+                            <div>
+                                <a href="#">Privacy Policy</a>
+                                &middot;
+                                <a href="#">Terms &amp; Conditions</a>
+                            </div>
                         </div>
                     </div>
                 </footer>
@@ -168,4 +168,9 @@
         <script src="https://cdn.jsdelivr.net/npm/simple-datatables@latest" crossorigin="anonymous"></script>
         <script src="js/datatables-simple-demo.js"></script>
     </body>
+    <script>
+        $(function () {
+            $('[data-toggle="tooltip"]').tooltip()
+        })
+    </script>
 </html>
