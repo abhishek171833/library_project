@@ -58,8 +58,9 @@
                             </a>
                             <div class="collapse show" id="collapseLayouts" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
                                 <nav class="sb-sidenav-menu-nested nav">
-                                    <a class="nav-link" href="layout-static.html">Add Book</a>
-                                    <a class="nav-link active" href="tables.html">Manage Books</a>
+                                    <a class="nav-link" href="add-book.php">Add Book</a>
+                                    <a class="nav-link active" href="manage-books.php">Manage Books</a>
+                                    <a class="nav-link" href="manage-orders.php">Manage Book Orders</a>
                                 </nav>
                             </div>
                             <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapsePages" aria-expanded="false" aria-controls="collapsePages">

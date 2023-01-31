@@ -108,6 +108,7 @@
         <div class="album py-5 bg-light">
             <div class="container">
                 <a href="welcome.php" class="btn btn-primary m-4">&#x2190; Back</a>
+                <a href="books.php" class="btn btn-warning m-4">Order Books</a>
                 <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3 m-4">
 
 

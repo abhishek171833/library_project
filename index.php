@@ -11,7 +11,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
         <meta name="description" content="" />
         <meta name="author" content="" />
-        <title>Grayscale - Start Bootstrap Theme</title>
+        <title>Library Management</title>
         <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
         <!-- Font Awesome icons (free version)-->
         <script src="https://use.fontawesome.com/releases/v6.1.0/js/all.js" crossorigin="anonymous"></script>
@@ -202,32 +202,30 @@
                 <div class="d-flex justify-content-center">
                     <div class="text-center">
                         <h1 class="mx-auto my-0 text-uppercase">Library</h1>
-                        <h2 class="text-white-50 mx-auto mt-2 mb-5">A free, responsive, one page Bootstrap theme created by Start Bootstrap.</h2>
-                        <a class="btn btn-primary" href="#about">Get Started</a>
+                        <h2 class="text-white-50 mx-auto mt-2 mb-5">I have always imagined that Paradise will be a kind of a Library</h2>
+                        <a class="btn btn-success" href="#about">Learn More</a>
                     </div>
                 </div>
             </div>
         </header>
         <!-- About-->
-        <section class="about-section text-center" id="about">
+        <section class="about-section text-center py-3" id="about">
             <div class="container px-4 px-lg-5">
                 <div class="row gx-4 gx-lg-5 justify-content-center">
                     <div class="col-lg-8">
-                        <h2 class="text-white mb-4">Built with Bootstrap 5</h2>
+                        <h2 class="text-white mb-4">Library Management</h2>
                         <p class="text-white-50">
-                            Grayscale is a free Bootstrap theme created by Start Bootstrap. It can be yours right now, simply download the template on
-                            <a href="https://startbootstrap.com/theme/grayscale/">the preview page.</a>
-                            The theme is open source, and you can use it for any purpose, personal or commercial.
+                        Library Management is the adaptation of the principles and techniques of management to the library situation. It includes decision making and getting the work done by others. The five fundamental management functions are: Planning, Organizing, Staffing, Leading and Controlling
                         </p>
                     </div>
                 </div>
-                <img class="img-fluid" src="assets/img/ipad.png" alt="..." />
+                <img class="img-fluid" src="assets/img/main_library.png" alt="..." />
             </div>
         </section>
         <!-- Contact-->
         <!-- Footer -->
        <!-- Footer -->
-<footer class="text-center text-lg-start bg-dark text-muted">
+<footer class="text-center text-lg-start bg-dark text-muted" id="footer">
   <!-- Section: Social media -->
   <section class="d-flex justify-content-center justify-content-lg-between p-4 border-bottom">
     <!-- Left -->
@@ -238,23 +236,17 @@
 
     <!-- Right -->
     <div>
-      <a href="" class="me-4 link-secondary">
+      <a class="footer-icon p-2" href="youtube.com">
         <i class="fab fa-facebook-f"></i>
       </a>
-      <a href="" class="me-4 link-secondary">
+      <a class="footer-icon p-2" href="youtube.com">
         <i class="fab fa-twitter"></i>
       </a>
-      <a href="" class="me-4 link-secondary">
-        <i class="fab fa-google"></i>
-      </a>
-      <a href="" class="me-4 link-secondary">
+      <a class="footer-icon p-2" href="youtube.com">
         <i class="fab fa-instagram"></i>
       </a>
-      <a href="" class="me-4 link-secondary">
+      <a class="footer-icon p-2" href="youtube.com">
         <i class="fab fa-linkedin"></i>
-      </a>
-      <a href="" class="me-4 link-secondary">
-        <i class="fab fa-github"></i>
       </a>
     </div>
     <!-- Right -->
@@ -267,62 +259,16 @@
       <!-- Grid row -->
       <div class="row mt-3">
         <!-- Grid column -->
-        <div class="col-md-3 col-lg-4 col-xl-3 mx-auto mb-4">
+        <div class="col-md-6 mx-auto mb-4">
           <!-- Content -->
           <h6 class="text-uppercase fw-bold mb-4">
-            <i class="fas fa-gem me-3 text-secondary"></i>Company name
+            <i class="fas fa-gem me-3 text-secondary"></i>Library Management
           </h6>
           <p>
-            Here you can use rows and columns to organize your footer content. Lorem ipsum
-            dolor sit amet, consectetur adipisicing elit.
+          Library Management is the adaptation of the principles and techniques of management to the library situation. It includes decision making and getting the work done by others. The five fundamental management functions are: Planning, Organizing, Staffing, Leading and Controlling
           </p>
         </div>
-        <!-- Grid column -->
-
-        <!-- Grid column -->
-        <div class="col-md-2 col-lg-2 col-xl-2 mx-auto mb-4">
-          <!-- Links -->
-          <h6 class="text-uppercase fw-bold mb-4">
-            Products
-          </h6>
-          <p>
-            <a href="#!" class="text-reset">Angular</a>
-          </p>
-          <p>
-            <a href="#!" class="text-reset">React</a>
-          </p>
-          <p>
-            <a href="#!" class="text-reset">Vue</a>
-          </p>
-          <p>
-            <a href="#!" class="text-reset">Laravel</a>
-          </p>
-        </div>
-        <!-- Grid column -->
-
-        <!-- Grid column -->
-        <div class="col-md-3 col-lg-2 col-xl-2 mx-auto mb-4">
-          <!-- Links -->
-          <h6 class="text-uppercase fw-bold mb-4">
-            Useful links
-          </h6>
-          <p>
-            <a href="#!" class="text-reset">Pricing</a>
-          </p>
-          <p>
-            <a href="#!" class="text-reset">Settings</a>
-          </p>
-          <p>
-            <a href="#!" class="text-reset">Orders</a>
-          </p>
-          <p>
-            <a href="#!" class="text-reset">Help</a>
-          </p>
-        </div>
-        <!-- Grid column -->
-
-        <!-- Grid column -->
-        <div class="col-md-4 col-lg-3 col-xl-3 mx-auto mb-md-0 mb-4">
+        <div class="col-md-6 mx-auto mb-md-0 mb-4 text-center">
           <!-- Links -->
           <h6 class="text-uppercase fw-bold mb-4">Contact</h6>
           <p><i class="fas fa-home me-3 text-secondary"></i> New York, NY 10012, US</p>
@@ -343,7 +289,7 @@
   <!-- Copyright -->
   <div class="text-center p-4" style="background-color: rgba(0, 0, 0, 0.025);">
     © 2021 Copyright:
-    <a class="text-reset fw-bold" href="https://mdbootstrap.com/">MDBootstrap.com</a>
+    <a class="text-reset fw-bold" >Library Management</a>
   </div>
   <!-- Copyright -->
 </footer>
