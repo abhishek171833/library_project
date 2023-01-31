@@ -142,6 +142,5 @@
             window.location.href = "index.php";
         })
     }, 500);
-      
 </script>
 <?php }?>

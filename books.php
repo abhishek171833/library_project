@@ -121,9 +121,9 @@
                             </svg>
                             <div class="card-body">
                                 <p class="card-text">Book Name : <?= $row['book_name'] ?></p>
-                                <p class="card-text">Status :<?php if($row['status']){echo "Available";}else{echo"Unavailable";}?></p>
+                                <p class="card-text">Status :<?php if(!$row['quantity']< 1){echo "Available";}else{echo"Unavailable";}?></p>
                                 <div class="d-flex justify-content-between align-items-center">
-                                <?php if(!$row['status']){?>
+                                <?php if($row['quantity'] < 1){?>
                                     <div class="btn-group">
                                         <button data-id="<?= $row['id']?>" type="button" class="p-3 btn btn-sm btn-outline-secondary bg-danger text-light" disabled>Book Is Unavailable</button>
                                     </div>
