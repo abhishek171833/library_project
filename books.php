@@ -30,36 +30,19 @@
             } );
         </script>
     </head>
-    <?php if(isset($_POST['book_id'])){
-            require('./db/conn.php');
-            session_start();
-            $user_email = $_SESSION['login_user'];
-            $result = mysqli_query($db,"select user_id from users");
-            $user_id = $result->fetch_row()[0];
-            mysqli_query($db,"INSERT INTO `orders` (`user_id`, `book_id`, `datetime`) VALUES ('$user_id', '$_POST[book_id]', current_timestamp());");
-            unset($_POST['book_id']);
-            ?>
-            <script>
-                setTimeout(() => {
-                    swal("Success!", "Book Orderd Successfully", "success")
-                }, 1000);
-            </script>
-        <?php } ?>
-    <?php ?>
-
     <?php 
     session_start();
     if(isset($_SESSION['login_user'])){ ?>
     <body>
     <div class="modal fade" id="bookModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-dialog">
             <div class="modal-content">
             <div class="modal-header">
                 <h1 class="modal-title fs-5" id="exampleModalLabel">Order This Book</h1>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form action="./books.php" method="post" onsubmit="return false;">
+                <form id="order_form" action="books.php" method="post">
                     <input type="hidden" id="book_id" name="book_id">
                     <div class="mb-3">
                         <label for="book_name" class="form-label">Book Name</label>
@@ -142,7 +125,7 @@
                                 <div class="d-flex justify-content-between align-items-center">
                                 <?php if(!$row['status']){?>
                                     <div class="btn-group">
-                                        <button data-id="<?= $row['id']?>" type="button" class="p-3 btn btn-sm btn-outline-secondary order-button bg-danger text-light" disabled>Book Is Unavailable</button>
+                                        <button data-id="<?= $row['id']?>" type="button" class="p-3 btn btn-sm btn-outline-secondary bg-danger text-light" disabled>Book Is Unavailable</button>
                                     </div>
                                 <?php } else { ?>
                                     <div class="btn-group">
@@ -177,7 +160,6 @@
         let order_button = document.querySelectorAll(".order-button")
         order_button.forEach(element => {
             element.addEventListener("click",function(){
-                console.log("abhishek")
                 let id = this.getAttribute('data-id')
                 let book = this.getAttribute('data-name')
                 let book_id = this.getAttribute('data-id')
@@ -185,13 +167,41 @@
                 let book_id_el = document.getElementById("book_id")
                 book_name.value = book
                 book_id_el.value = book_id
-
+                let order_but = document.getElementById("order-book")
+                order_but.addEventListener("click",function(e){
+                    e.preventDefault();
+                    let from_date = document.getElementById("datepicker")
+                    let to_date = document.getElementById("datepicker2")
+                    if(from_date.value == "" || to_date.value == ""){
+                        swal("Error!", "Please Choose Date", "error")
+                    }
+                    else{
+                        let order_form = document.getElementById("order_form")
+                        console.log(order_form)
+                        order_form.submit();
+                    }
+                })
             })
         });
-        let order_book = document.getElementById("order-book")
-        order_book.addEventListener("click",function(){
-            let val = document.getElementById("datepicker")
-            console.log(parseInt(val.value.substr(3,6)))
-        })
+        // let order_book = document.getElementById("order-book")
+        // order_book.addEventListener("click",function(){
+        //     let val = document.getElementById("datepicker")
+        //     console.log(parseInt(val.value.substr(3,6)))
+        // })
     });
 </script>
+<?php if(isset($_POST['book_id'])){
+            require('./db/conn.php');
+            $user_email = $_SESSION['login_user'];
+            $result = mysqli_query($db,"select user_id from users");
+            $user_id = $result->fetch_row()[0];
+            mysqli_query($db,"INSERT INTO `orders` (`user_id`, `book_id`,`from_date`,`to_date`,`datetime`) VALUES ('$user_id', '$_POST[book_id]','$_POST[from_date]','$_POST[to_date]', current_timestamp());");
+            unset($_POST['book_id']);
+            ?>
+            <script>
+                setTimeout(() => {
+                    swal("Success!", "Book Orderd Successfully", "success")
+                }, 1000);
+            </script>
+        <?php } ?>
+<?php ?>

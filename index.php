@@ -27,7 +27,7 @@
     <?php
         if(isset($_POST['lemail'])){
         require('./db/conn.php');
-        $res=mysqli_query($db,"SELECT * FROM `student` WHERE Email='$_POST[lemail]' && Password='$_POST[lpassword]';");
+        $res=mysqli_query($db,"SELECT * FROM `users` WHERE email_address='$_POST[lemail]' && Password='$_POST[lpassword]';");
         $count=mysqli_num_rows($res);
         if($count):
             $_SESSION['login_user'] = $_POST['lemail']; ?>
@@ -52,11 +52,11 @@
 
         if(isset($_POST['name'])){
             require('./db/conn.php');
-            $res=mysqli_query($db,"SELECT Email FROM `student` WHERE Email='$_POST[email]';");
+            $res=mysqli_query($db,"SELECT email_address FROM `users` WHERE email_address='$_POST[email]';");
             $email=mysqli_num_rows($res);
 
             
-            $res=mysqli_query($db,"SELECT Contact FROM `student` WHERE Contact='$_POST[phone]';");
+            $res=mysqli_query($db,"SELECT phone_no FROM `users` WHERE phone_no='$_POST[phone]';");
             $phone=mysqli_num_rows($res);
 
             if($_POST['password'] != $_POST['cpassword']):?>
@@ -85,7 +85,7 @@
                 </script>
 
             <?php else:
-                    mysqli_query($db,"INSERT INTO `STUDENT` VALUES('$_POST[name]', '$_POST[last_name]', '$_POST[username]', '$_POST[password]', '$_POST[roll_no]', '$_POST[phone]', '$_POST[email]');");?>
+                    mysqli_query($db,"INSERT INTO `USERS` VALUES('$_POST[name]', '$_POST[last_name]', '$_POST[username]', '$_POST[password]', '$_POST[roll_no]', '$_POST[phone]', '$_POST[email]');");?>
                     <script>
                         setTimeout(() => {
                             swal("Success!", "Sign Up Successfully Now You Can Log In!", "success");
