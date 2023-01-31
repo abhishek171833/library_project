@@ -1,3 +1,20 @@
+<?php 
+    require('db/conn.php');
+    if(isset($_POST['book_id'])){
+        $sql = "DELETE FROM `books` WHERE `id` = '$_POST[book_id]';";
+        $query = mysqli_query($db, $sql);
+        if($query){
+        $res['status'] = 1;
+        $res['message'] = 'Book Deleted Succussfully';
+        echo json_encode($res);
+        exit();
+    } 
+    else{
+        $res['status'] = 0;
+        $res['message'] = 'Some Error Occured';
+        echo json_encode($res);
+        exit();
+    }} ?>
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -11,6 +28,7 @@
         <link href="css/styles.css" rel="stylesheet" />
         <script src="https://use.fontawesome.com/releases/v6.1.0/js/all.js" crossorigin="anonymous"></script>
         <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+        <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     </head>
     <body class="sb-nav-fixed">
         <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark justify-content-between">
@@ -143,10 +161,10 @@
                                             <td>
                                                 <ul class="list-inline d-flex justify-content-between">
                                                     <li>
-                                                        <button data-toggle="tooltip" data-placement="left" title="Edit" class="btn btn-success btn-sm rounded-0" type="button" data-toggle="tooltip" data-placement="top" title="" data-original-title="Edit"><i class="fa fa-edit"></i></button>
+                                                        <a href="add-book.php?book=<?=$row['book_name']?>&author=<?=$row['author']?>&edition=<?=$row['edition']?>&quantity=<?=$row['quantity']?>&department=<?=$row['department']?>" data-toggle="tooltip" data-placement="left" title="Edit" class="btn btn-success btn-sm rounded-0" type="button" data-toggle="tooltip" data-placement="top" title="" data-original-title="Edit"><i class="fa fa-edit"></i></a>
                                                     </li>
                                                     <li>
-                                                        <button data-toggle="tooltip" data-placement="left" title="Delete" class="btn btn-danger btn-sm rounded-0" type="button" data-toggle="tooltip" data-placement="top" title="" data-original-title="Delete"><i class="fa fa-trash"></i></button>
+                                                        <button data-id="<?=$row['id']?>" data-toggle="tooltip" data-placement="left" title="Delete" class="btn btn-danger btn-sm rounded-0 delete_button" type="button" data-toggle="tooltip" data-placement="top" title="" data-original-title="Delete"><i class="fa fa-trash"></i></button>
                                                     </li>
                                                 </ul>
                                             </td>
@@ -180,6 +198,49 @@
     <script>
         $(function () {
             $('[data-toggle="tooltip"]').tooltip()
+        })
+        document.addEventListener("DOMContentLoaded", () => {
+            setTimeout(() => {
+                const delete_button = document.querySelectorAll(".delete_button");
+                delete_button.forEach(element => {
+                    element.addEventListener("click",function(e){
+                        let book_id = this.getAttribute("data-id");
+                        Swal.fire({
+                        title: 'Are you sure?',
+                        text: "You won't be able to revert this!",
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: '#3085d6',
+                        cancelButtonColor: '#d33',
+                        confirmButtonText: 'Yes, delete it!'
+                        }).then(async (result) => {
+                        if (result.isConfirmed) {
+                            let data = new FormData();
+                            data.append("book_id",book_id)
+                            let response = await fetch("manage-books.php",{
+                            method:'post',
+                            body:data
+                            })
+                            let json_res = await response.json();
+                            if(json_res.status){
+                                Swal.fire(
+                                    'Success!',
+                                    json_res.message,
+                                    'success'
+                                 ).then(()=>location.reload())
+                            }
+                            else{
+                                Swal.fire(
+                                    'Error!',
+                                    json_res.message,
+                                    'error'
+                                 )
+                            }
+                        }
+                        })
+                    })
+                });
+            }, 0);
         })
     </script>
 </html>

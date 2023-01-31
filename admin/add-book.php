@@ -86,25 +86,29 @@
                     <form>
                         <div class="form-group mb-3 mt-2">
                             <label for="exampleInputEmail1">Book Name</label>
-                            <input type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter book name">
+                            <input value="<?php if(isset($_GET['book'])){echo $_GET['book'];}?>" type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter book name">
                         </div>
                         <div class="form-group mb-3 mt-2">
                             <label for="exampleInputPassword1">Author</label>
-                            <input type="text" class="form-control" id="exampleInputPassword1" placeholder="Enter book author name">
+                            <input value="<?php if(isset($_GET['author'])){echo $_GET['author'];}?>" type="text" class="form-control" id="exampleInputPassword1" placeholder="Enter book author name">
                         </div>
                         <div class="form-group mb-3 mt-2">
                             <label for="exampleInputPassword1">Edition</label>
-                            <input type="text" class="form-control" id="exampleInputPassword1" placeholder="Enter book author name">
+                            <input value="<?php if(isset($_GET['edition'])){echo $_GET['edition'];}?>" type="text" class="form-control" id="exampleInputPassword1" placeholder="Enter book author name">
                         </div>
                         <div class="form-group mb-3 mt-2">
-                            <label for="exampleInputPassword1">Quentity</label>
-                            <input type="number" class="form-control" id="exampleInputPassword1" placeholder="Enter book author name">
+                            <label for="exampleInputPassword1">Quantity</label>
+                            <input value="<?php if(isset($_GET['quantity'])){echo $_GET['quantity'];}?>" type="number" class="form-control" id="exampleInputPassword1" placeholder="Enter book author name">
                         </div>
                         <div class="form-group mb-3 mt-2">
                             <label for="exampleInputPassword1">Department</label>
-                            <input type="text" class="form-control" id="exampleInputPassword1" placeholder="Enter book author name">
+                            <input value="<?php if(isset($_GET['department'])){echo $_GET['department'];}?>" type="text" class="form-control" id="exampleInputPassword1" placeholder="Enter book author name">
                         </div>
+                        <?php if(!isset($_GET['book'])){?>
                         <button type="submit" class="btn btn-success">Add Book</button>
+                        <?php } else{?>
+                            <button type="submit" class="btn btn-success">Edit Book</button>
+                        <?php } ?>
                     </form>
                 </main>
                 <footer class="py-4 bg-light mt-auto">

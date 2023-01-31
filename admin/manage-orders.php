@@ -1,3 +1,20 @@
+<?php 
+    require('db/conn.php');
+    if(isset($_POST['order_id'])){
+        $sql = "UPDATE `orders` SET `status` = '$_POST[book_status]' WHERE `id` = $_POST[order_id];";
+        $query = mysqli_query($db, $sql);
+        if($query){
+        $res['status'] = 1;
+        $res['message'] = 'Order Status Changes Succussfully';
+        echo json_encode($res);
+        exit();
+    } 
+    else{
+        $res['status'] = 0;
+        $res['message'] = 'Some Error Occured';
+        echo json_encode($res);
+        exit();
+    }} ?>
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -10,6 +27,7 @@
         <link href="https://cdn.jsdelivr.net/npm/simple-datatables@latest/dist/style.css" rel="stylesheet" />
         <link href="css/styles.css" rel="stylesheet" />
         <script src="https://use.fontawesome.com/releases/v6.1.0/js/all.js" crossorigin="anonymous"></script>
+        <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
         <style>
             .select{
                 cursor:pointer;
@@ -140,10 +158,10 @@
                                             <td><?=$row['to_date']?></td>
                                             <td>
 
-                                            <select class="form-select select" name="status" id="">
-                                                <option value="1">Approve</option>
-                                                <option value="1">Pending</option>
-                                                <option value="1">Deline</option>
+                                            <select data-id="<?=$row['id']?>" class="form-select select" id="book_status">
+                                                <option <?php if($row['status']== "0"){echo "selected";}?> value="0">Pending</option>
+                                                <option <?php if($row['status']== "1"){echo "selected";}?> value="1">Approve</option>
+                                                <option <?php if($row['status']== "2"){echo "selected";}?> value="2">Deline</option>
                                             </select>
                                             </td>
                                         </tr>
@@ -168,4 +186,31 @@
         <script src="https://cdn.jsdelivr.net/npm/simple-datatables@latest" crossorigin="anonymous"></script>
         <script src="js/datatables-simple-demo.js"></script>
     </body>
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            setTimeout(() => {
+                const select_box = document.querySelectorAll(".select");
+                select_box.forEach(element => {
+                    element.addEventListener("change",async function(e){
+                        let order_id = this.getAttribute("data-id")
+                        let data = new FormData();
+                        let book_status_val = document.getElementById("book_status")
+                        data.append("order_id",order_id)
+                        data.append("book_status",book_status_val.value)
+                        let response = await fetch("manage-orders.php",{
+                            method:'post',
+                            body:data
+                        })
+                        let json_res = await response.json();
+                        if(json_res.status){
+                            swal('Success!',json_res.message,'success')
+                        }
+                        else{
+                            swal('Error!',json_res.message,'error')
+                        }
+                    })
+                });
+            }, 0);
+        })
+    </script>
 </html>
