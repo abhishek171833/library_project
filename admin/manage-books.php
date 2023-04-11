@@ -135,7 +135,7 @@
                                             <th>Edition</th>
                                             <th>Quantity</th>
                                             <th>Department</th>
-                                            <th>Action</th>
+                                            <th class="text-center">Action</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -159,11 +159,11 @@
                                             <td><?=$row['quantity']?></td>
                                             <td><?=$row['department']?></td>
                                             <td>
-                                                <ul class="list-inline d-flex justify-content-between">
-                                                    <li>
-                                                        <a href="add-book.php?book=<?=$row['book_name']?>&author=<?=$row['author']?>&edition=<?=$row['edition']?>&quantity=<?=$row['quantity']?>&department=<?=$row['department']?>" data-toggle="tooltip" data-placement="left" title="Edit" class="btn btn-success btn-sm rounded-0" type="button" data-toggle="tooltip" data-placement="top" title="" data-original-title="Edit"><i class="fa fa-edit"></i></a>
+                                                <ul class="list-inline d-flex justify-content-start">
+                                                    <li class="m-2">
+                                                        <a href="add-book.php?book_id=<?=$row['id']?>" data-toggle="tooltip" data-placement="left" title="Edit" class="btn btn-success btn-sm rounded-0" type="button" data-toggle="tooltip" data-placement="top" title="" data-original-title="Edit"><i class="fa fa-edit"></i></a>
                                                     </li>
-                                                    <li>
+                                                    <li class="m-2">
                                                         <button data-id="<?=$row['id']?>" data-toggle="tooltip" data-placement="left" title="Delete" class="btn btn-danger btn-sm rounded-0 delete_button" type="button" data-toggle="tooltip" data-placement="top" title="" data-original-title="Delete"><i class="fa fa-trash"></i></button>
                                                     </li>
                                                 </ul>

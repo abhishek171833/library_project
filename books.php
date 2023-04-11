@@ -25,8 +25,6 @@
             $( function() {
                 $("#datepicker" ).datepicker({ minDate: 0});
                 $("#datepicker2" ).datepicker({ minDate:0 });
-                // $("#datepicker2" ).datepicker({ minDate:'+4d' });
-                // $("#datepicker" ).datepicker();
             } );
         </script>
     </head>
@@ -113,13 +111,7 @@
                     while ($row = mysqli_fetch_assoc($query)){?>
                     <div class="col-md-4">
                         <div class="card shadow-sm">
-                            <svg class="bd-placeholder-img card-img-top" width="100%" height="225"
-                                xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail"
-                                preserveAspectRatio="xMidYMid slice" focusable="false">
-                                <title>Placeholder</title>
-                                <rect width="100%" height="100%" fill="#55595c"></rect><text x="50%" y="50%" fill="#eceeef"
-                                    dy=".3em">Thumbnail</text>
-                            </svg>
+                            <img class="w-100" src="./admin/<?=$row['image_path']?>" alt="book image">
                             <div class="card-body">
                                 <p class="card-text">Book Name : <?= $row['book_name'] ?></p>
                                 <p class="card-text">Status :<?php if(!$row['quantity']< 1){echo "Available";}else{echo"Unavailable";}?></p>

@@ -111,35 +111,29 @@
                 <a href="books.php" class="btn btn-warning m-4">Order Books</a>
                 <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3 m-4">
 
-
                     <?php 
                     require('db/conn.php');
                     $user_email = $_SESSION['login_user'];
-                    $result = mysqli_query($db,"select user_id from users");
-                    $user_id = $result->fetch_row()[0];
+
+                    $res=mysqli_query($db,"select user_id FROM `users`;");
+                    $user_id = $res->fetch_row()[0];
                     $sql = "select * from orders where user_id = $user_id and status != '2';";
-                    $query2 = mysqli_query($db, $sql);
-                    $query = mysqli_query($db, $sql);
-                    $row2 = mysqli_fetch_assoc($query2);
-                    if(!$row2){ ?>
-                        <div class="col-md-12">Oops!No Orders Found <a href="books.php">click here to order book </a> </div>
-                    <?php }
-                    else{
-                        while ($row = mysqli_fetch_assoc($query)){
+
+                    $res=mysqli_query($db,"select * from orders where user_id = $user_id and status != '2';");
+
+                    $rowcount=mysqli_num_rows($res);
+                    
+                    if($rowcount>0){ 
+                     while ($row = mysqli_fetch_assoc($res)){
                             $result = mysqli_query($db,"select book_name from books where id = $row[book_id];");
-                            $book_name = $result->fetch_row()[0];?>
+                            $book_name = $result->fetch_row()[0];
+                            ?>
                     <div class="col-md-4">
                         <div class="card shadow-sm">
-                            <svg class="bd-placeholder-img card-img-top" width="100%" height="225"
-                                xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail"
-                                preserveAspectRatio="xMidYMid slice" focusable="false">
-                                <title>Placeholder</title>
-                                <rect width="100%" height="100%" fill="#55595c"></rect><text x="50%" y="50%" fill="#eceeef"
-                                    dy=".3em">Thumbnail</text>
-                            </svg>
+                            <img src="./assets/img/order.jpg" alt="order image">
                             <div class="card-body">
                                 <p class="card-text">Book Name : <?= $book_name ?></p>
-                                <p class="card-text">Status : <?php if($row['status'] == 0){echo "Pending";}else if($row['status'] == 1){echo "Approved";}else{echo "Declined";} ?></p>
+                                <p class="card-text">Status : <span class="<?php if($row['status'] == 0){echo "text-warning";}else if($row['status'] == 1){echo "text-success";}else{echo "text-danger";} ?>"><?php if($row['status'] == 0){echo "Pending";}else if($row['status'] == 1){echo "Approved";}else{echo "Declined";} ?></span></p>
                                 <div class="d-flex justify-content-between align-items-center">
                                     <div class="btn-group">
                                         <button data-id="<?= $row['id'] ?>" data-status="<?php if($row['status'] == 0){echo "Pending";}else if($row['status'] == 1){echo "Approved";}else{echo "Declined";}  ?>" data-to="<?= $row['to_date']?>" data-from="<?= $row['from_date'];?>" data-name="<?= $book_name ?>" data-bs-toggle="modal" data-bs-target="#bookModal" data-id="" type="button" class="p-3 text-light bg-success btn btn-sm btn-outline-secondary order-button">View Order Details</button>
@@ -149,7 +143,11 @@
                             </div>
                         </div>
                     </div>
-                    <?php } } ?>
+                    <?php  } ?>
+                    <?php }
+                    else{ ?>
+                       <div class="col-md-12">Oops!No Orders Found <a href="books.php">click here to order book </a> </div>
+                    <?php  } ?>
                 </div>
             </div>
         </div>
@@ -199,6 +197,9 @@
             <script>
                 setTimeout(() => {
                     swal("Success!", "Your Order Has Been Cancelled Successfully", "success")
+                    .then(()=>{
+                        location.href="orders.php";
+                    })
                 })
             </script>
             <?php } ?>

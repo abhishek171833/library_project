@@ -140,7 +140,7 @@
                                     $query = mysqli_query($db, $sql);
                                     $row2 = mysqli_fetch_assoc($query2);
                                     if(!$row2){ ?>
-                                        <div class="col-md-12">Oops!No Orders Found <a href="books.php">click here to order book </a> </div>
+                                        <div class="col-md-12">Oops!No Orders Found</div>
                                     <?php }
                                     else{
                                         while ($row = mysqli_fetch_assoc($query)){ ?>

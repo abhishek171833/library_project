@@ -54,10 +54,10 @@
                 <div class="col-lg-6 col-md-8 mx-auto">
                     <h1 class="fw-light">Library</h1>
                     <p class="lead text-muted">Online Library Management System is an Automated Library System that handles the various functions of the library. It provides a complete solution to the library management software</p>
-                    <p>
+                    <!-- <p>
                         <a href="#" class="btn btn-primary my-2">Main call to action</a>
                         <a href="#" class="btn btn-secondary my-2">Secondary action</a>
-                    </p>
+                    </p> -->
                 </div>
             </div>
         </section>
@@ -66,13 +66,7 @@
                 <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
                     <div class="col-md-6">
                         <div class="card shadow-sm">
-                            <svg class="bd-placeholder-img card-img-top" width="100%" height="225"
-                                xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail"
-                                preserveAspectRatio="xMidYMid slice" focusable="false">
-                                <title>Placeholder</title>
-                                <rect width="100%" height="100%" fill="#55595c"></rect><text x="50%" y="50%" fill="#eceeef"
-                                    dy=".3em">Thumbnail</text>
-                            </svg>
+                            <img class="w-100" src="./assets/img/book_cover.jpg" alt="">
 
                             <div class="card-body">
                                 <p class="card-text">Order Books</p>
@@ -87,13 +81,7 @@
                     </div>
                     <div class="col-md-6">
                         <div class="card shadow-sm">
-                            <svg class="bd-placeholder-img card-img-top" width="100%" height="225"
-                                xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail"
-                                preserveAspectRatio="xMidYMid slice" focusable="false">
-                                <title>Placeholder</title>
-                                <rect width="100%" height="100%" fill="#55595c"></rect><text x="50%" y="50%" fill="#eceeef"
-                                    dy=".3em">Thumbnail</text>
-                            </svg>
+                            <img class="w-100" src="./assets/img/order.jpg" alt="">
 
                             <div class="card-body">
                                 <p class="card-text">View you orders</p>

@@ -1,3 +1,51 @@
+<?php 
+if(isset($_POST['book_name'])){
+    require('db/conn.php');
+    if(isset($_POST["image_file_input"])){
+        $file_name = $_FILES['image_file_input']['name'];
+        $file_size =$_FILES['image_file_input']['size'];
+        $file_tmp =$_FILES['image_file_input']['tmp_name'];
+        $file_type=$_FILES['image_file_input']['type'];
+        
+        $path = "./assets/img/books";
+        if(!is_dir($path)){
+            mkdir($path, 0777, true);
+        }
+        move_uploaded_file($file_tmp,"assets/img/books/".$file_name);
+        $file_path_name = "assets/img/books/".$file_name;
+
+        if(!empty($_POST['book_id'])){
+            $res = mysqli_query($db,"UPDATE `books` SET `image_path` = '$file_path_name'  WHERE `books`.`id` = $_POST[book_id];");
+        }
+    }
+    if(!empty($_POST['book_id'])){
+        $res = mysqli_query($db,"UPDATE `books` SET `book_name` = '$_POST[book_name]', `author` = '$_POST[author]', `edition` = '$_POST[edition]' , `quantity` = '$_POST[quantity]', `department` = '$_POST[department]', `description` = '$_POST[description]' WHERE `books`.`id` = $_POST[book_id];");
+        $message['message'] = "Book Updated Successfully";
+    }
+    else{
+        if(isset($_POST["image_file_input"])){
+            $res = mysqli_query($db,"INSERT INTO `books` (`book_name`, `author`,`edition`,`quantity`,`department`,`description`,`image_path`) VALUES ('$_POST[book_name]', '$_POST[author]','$_POST[edition]','$_POST[quantity]','$_POST[department]','$_POST[description]','$file_path_name')");
+        }
+        else{
+            $res = mysqli_query($db,"INSERT INTO `books` (`book_name`, `author`,`edition`,`quantity`,`department`,`description`,`image_path`) VALUES ('$_POST[book_name]', '$_POST[author]','$_POST[edition]','$_POST[quantity]','$_POST[department]','$_POST[description]','assets/img/books/home.jpg')");
+
+        }
+        $message['message'] = "Book Added Successfully";
+    }
+    if($res){
+        $message['status'] = 1;
+        echo json_encode($message);
+        exit();
+    }
+    else{
+        $message['status'] = 0;
+        $message['message'] = "Something Went Wrong";
+        echo json_encode($message);
+        exit();
+    }
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -9,6 +57,8 @@
         <title>Charts - SB Admin</title>
         <link href="css/styles.css" rel="stylesheet" />
         <script src="https://use.fontawesome.com/releases/v6.1.0/js/all.js" crossorigin="anonymous"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
+        <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
     </head>
     <body class="sb-nav-fixed">
         <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark justify-content-between">
@@ -78,37 +128,54 @@
             </div>
             <div id="layoutSidenav_content">
                 <main class="container p-4 w-75">
-                    <?php if(!isset($_GET['book'])){?>
+                    <?php if(!isset($book['book'])){?>
                     <h2>Add book</h2>
                     <?php } else{?>
                     <h2>Edit book</h2>
                     <?php }?>
-                    <form>
-                        <div class="form-group mb-3 mt-2">
-                            <label for="exampleInputEmail1">Book Name</label>
-                            <input value="<?php if(isset($_GET['book'])){echo $_GET['book'];}?>" type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter book name">
+                    <form id="book_form">
+                        <div class="row">
+                            <?php
+                                if(isset($_GET['book_id'])){
+                                    require('db/conn.php');
+                                    $res=mysqli_query($db,"SELECT * FROM `books` WHERE id='$_GET[book_id]';");
+                                    $book=$res->fetch_row();
+                                }
+                            ?>    
+                            <div class="form-group mb-3 mt-2 col-md-6">
+                                <label for="book_name">Book Name</label>
+                                <input value="<?php if(isset($book[1])){echo $book[1];}?>" type="text" class="form-control" id="book_name" name="book_name" placeholder="Enter book name">
+                            </div>
+                            <div class="form-group mb-3 mt-2 col-md-6">
+                                <label for="author">Author</label>
+                                <input name="author" value="<?php if(isset($book[2])){echo $book[2];}?>" type="text" class="form-control" id="author" placeholder="Enter book author">
+                            </div>
+                            <div class="form-group mb-3 mt-2 col-md-6">
+                                <label for="edition">Edition</label>
+                                <input name="edition" value="<?php if(isset($book[4])){echo $book[4];}?>" type="text" class="form-control" id="edition" placeholder="Enter book edition">
+                            </div>
+                            <div class="form-group mb-3 mt-2 col-md-6">
+                                <label for="quantity">Quantity</label>
+                                <input name="quantity" value="<?php if(isset($book[5])){echo $book[5];}?>" type="number" class="form-control" id="quantity" placeholder="Enter book quantity name">
+                            </div>
+                            <div class="mb-3 col-md-6">
+                                <label for="formFile" class="form-label">Book Image File</label>
+                                <input class="form-control" type="file" id="image_file_input" style="height:unset;"  accept="image/*" name="image_file_input">
+                            </div>
+                            <div class="form-group mb-3 mt-2 col-md-6">
+                                <label for="department">Department</label>
+                                <input name="department" value="<?php if(isset($book[6])){echo $book[6];}?>" type="text" class="form-control" id="department" placeholder="Enter book department">
+                            </div>
+                            <div class="mb-3 col-md-6">
+                                <img class="w-75" id="book_img" src="<?php if(isset($book[3])){echo "./".$book[3];}else{echo "../assets/img/home.jpg";}?>" alt="book image" style="width:250px;">
+                            </div>
+                            <div class="form-group mb-3 mt-2 col-md-6">
+                                <label for="description">Description</label>
+                                <textarea class="form-control" name="description" id="description" rows="7"><?php if(isset($book[7])){echo $book[7];}else{echo "";}?></textarea>
+                            </div>
                         </div>
-                        <div class="form-group mb-3 mt-2">
-                            <label for="exampleInputPassword1">Author</label>
-                            <input value="<?php if(isset($_GET['author'])){echo $_GET['author'];}?>" type="text" class="form-control" id="exampleInputPassword1" placeholder="Enter book author name">
-                        </div>
-                        <div class="form-group mb-3 mt-2">
-                            <label for="exampleInputPassword1">Edition</label>
-                            <input value="<?php if(isset($_GET['edition'])){echo $_GET['edition'];}?>" type="text" class="form-control" id="exampleInputPassword1" placeholder="Enter book author name">
-                        </div>
-                        <div class="form-group mb-3 mt-2">
-                            <label for="exampleInputPassword1">Quantity</label>
-                            <input value="<?php if(isset($_GET['quantity'])){echo $_GET['quantity'];}?>" type="number" class="form-control" id="exampleInputPassword1" placeholder="Enter book author name">
-                        </div>
-                        <div class="form-group mb-3 mt-2">
-                            <label for="exampleInputPassword1">Department</label>
-                            <input value="<?php if(isset($_GET['department'])){echo $_GET['department'];}?>" type="text" class="form-control" id="exampleInputPassword1" placeholder="Enter book author name">
-                        </div>
-                        <?php if(!isset($_GET['book'])){?>
-                        <button type="submit" class="btn btn-success">Add Book</button>
-                        <?php } else{?>
-                            <button type="submit" class="btn btn-success">Edit Book</button>
-                        <?php } ?>
+                        
+                        <button data-id="<?php if(isset($book[0])){echo $book[0];}else{echo "";}?>" id="book_btn" type="submit" class="btn btn-success"><?php if(isset($book[0])){echo "Update Book";}else{echo "Add Book";}?></button>
                     </form>
                 </main>
                 <footer class="py-4 bg-light mt-auto">
@@ -133,4 +200,69 @@
         <script src="https://cdn.jsdelivr.net/npm/simple-datatables@latest" crossorigin="anonymous"></script>
         <script src="js/datatables-simple-demo.js"></script>
     </body>
+    <script>
+        $('document').ready(function () {
+            $("#image_file_input").change(function () {
+                if (this.files && this.files[0]) {
+                    var reader = new FileReader();
+                    reader.onload = function (e) {
+                        $('#book_img').attr('src', e.target.result);
+                    }
+                    reader.readAsDataURL(this.files[0]);
+                }
+            });
+        });
+        document.getElementById("book_btn").addEventListener("click",async function(e){
+            e.preventDefault();
+            let formData = new FormData(book_form);
+            let id = this.getAttribute("data-id");
+            if(book_name.value == ""){
+                swal("Warning!","Please Enter Book Name!","warning")
+            }
+            else if(author.value == ""){
+                swal("Warning!","Please Enter Book Author Name!","warning")
+            }
+            else if(edition.value == ""){
+                swal("Warning!","Please Enter Book Edition!","warning")
+            }
+            else if(quantity.value == ""){
+                swal("Warning!","Please Enter Book Quantity!","warning")
+            }
+            else if(department.value == ""){
+                swal("Warning!","Please Enter Book Department!","warning")
+            }
+            else if(description.value == ""){
+                swal("Warning!","Please Enter Book Description!","warning")
+            }
+            else{
+                formData.append('book_id',id)
+                formData.append('book_name',book_name.value)
+                formData.append('author',author.value)
+                formData.append('edition',edition.value)
+                formData.append('quantity',quantity.value)
+                formData.append('department',department.value)
+                formData.append('description',description.value.trim())
+
+                if(image_file_input.value != ""){
+                    formData.append('image_file_input',image_file_input.value)
+                }
+                let fetch_res = await fetch("add-book.php",{
+                    method:"POST",
+                    body:formData
+                })
+                let json_res = await fetch_res.json();
+                if(json_res.status){
+                    swal("Success!",json_res.message,"success")
+                    document.getElementById("book_form").reset();
+                    setTimeout(() => {
+                        window.location.href = 'manage-books.php';
+                    }, 2000);
+                }
+                else{
+                    swal("Error!",json_res.message,"error")
+                    document.getElementById("book_form").reset();
+                }
+            }
+        })
+    </script>
 </html>
