@@ -4,6 +4,64 @@
     if(isset($_SESSION['login_user'])){
         header('Location: welcome.php');
     }?>
+  <?php
+        if(isset($_POST['lemail'])){
+            require('./db/conn.php');
+            $res=mysqli_query($db,"SELECT * FROM `users` WHERE email_address='$_POST[lemail]' && Password='$_POST[lpassword]';");
+            $count=mysqli_num_rows($res);
+            if($count){
+                $_SESSION['login_user'] = $_POST['lemail'];
+                $message['status'] = 1;
+                $message['message'] = "You Logged In Successfully!";
+                echo json_encode($message);
+                exit();
+            }
+            else{
+                $message['status'] = 0;
+                $message['message'] = "Email Or Password Does Not Match!";
+                echo json_encode($message);
+                exit();
+
+            }
+        }
+
+        if(isset($_POST['first_name'])){
+            require('./db/conn.php');
+
+            $res=mysqli_query($db,"SELECT email_address FROM `users` WHERE email_address='$_POST[email]';");
+            $email=mysqli_num_rows($res);
+
+            $res=mysqli_query($db,"SELECT phone_no FROM `users` WHERE phone_no='$_POST[phone]';");
+            $phone=mysqli_num_rows($res);
+
+            if($_POST['password'] != $_POST['cpassword']){
+                $message['status'] = 0;
+                $message['message'] = "Password And Confirm Password Does Not Match!";
+                echo json_encode($message);
+                exit();
+            }
+            if($email){
+                $message['status'] = 0;
+                $message['message'] = "User With This Email Already Exists!";
+                echo json_encode($message);
+                exit();
+            }
+            if($phone){
+                $message['status'] = 0;
+                $message['message'] = "User With This Phone Number Already Exists!";
+                echo json_encode($message);
+                exit();
+            }
+            else{
+                mysqli_query($db,"INSERT INTO `USERS` (`first_name`, `last_name`,`username`,`password`,`address`,`phone_no`,`email_address`) VALUES('$_POST[first_name]', '$_POST[last_name]', '$_POST[username]', '$_POST[password]', '$_POST[address]', '$_POST[phone]', '$_POST[email]');");
+
+                $message['status'] = 1;
+                $message['message'] = "Sign Up Successfully Now You Can Log In!";
+                echo json_encode($message);
+                exit();
+            }
+        }
+?>
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -24,84 +82,12 @@
         <link href="css/styles.css" rel="stylesheet" />
         <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
     </head>
-    <?php
-        if(isset($_POST['lemail'])){
-        require('./db/conn.php');
-        $res=mysqli_query($db,"SELECT * FROM `users` WHERE email_address='$_POST[lemail]' && Password='$_POST[lpassword]';");
-        $count=mysqli_num_rows($res);
-        if($count):
-            $_SESSION['login_user'] = $_POST['lemail']; ?>
-
-            <script>
-                setTimeout(() => {
-                    swal("Success!", "You Logged In Successfully!", "success")
-                    .then(()=>{
-                        window.location.href = "welcome.php";
-                    })
-                }, 1000);
-            </script>
-            
-            <?php else:?>
-            <script>
-                setTimeout(() => {
-                    swal("Error!", "Email Or Password Does Not Match!", "error");
-                }, 1000);
-            </script>
-        <?php  endif;
-        }
-
-        if(isset($_POST['name'])){
-            require('./db/conn.php');
-            $res=mysqli_query($db,"SELECT email_address FROM `users` WHERE email_address='$_POST[email]';");
-            $email=mysqli_num_rows($res);
-
-            
-            $res=mysqli_query($db,"SELECT phone_no FROM `users` WHERE phone_no='$_POST[phone]';");
-            $phone=mysqli_num_rows($res);
-
-            if($_POST['password'] != $_POST['cpassword']):?>
-                <script>
-                    setTimeout(() => {
-                        swal("Warning!", "Password And Confirm Password Does Not Match!", "warning");
-                    }, 1000);
-                </script>
-
-            <?php 
-
-            elseif ($email): ?>
-                <script>
-                    setTimeout(() => {
-                        swal("Warning!", "User With This Email Already Exists!", "warning");
-                    }, 1000);
-                </script>
-            <?php 
-
-
-            elseif($phone): ?>
-                <script>
-                    setTimeout(() => {
-                        swal("Warning!", "User With This Phone Number Already Exists!", "warning");
-                    }, 1000);
-                </script>
-
-            <?php else:
-                    mysqli_query($db,"INSERT INTO `USERS` (`first_name`, `last_name`,`username`,`password`,`address`,`phone_no`,`email_address`) VALUES('$_POST[name]', '$_POST[last_name]', '$_POST[username]', '$_POST[password]', '$_POST[address]', '$_POST[phone]', '$_POST[email]');");
-                    ?>
-                    <script>
-                        setTimeout(() => {
-                            swal("Success!", "Sign Up Successfully Now You Can Log In!", "success");
-                        }, 1000);
-                    </script>
-                <?php
-              endif;
-            }
-        ?>
     <body id="page-top">
         <!-- Navigation-->
         <nav class="navbar navbar-expand-lg navbar-light fixed-top" id="mainNav">
             <div class="container px-4 px-lg-5">
                 <a class="navbar-brand" href="#page-top">Library Management</a>
-                <button class="navbar-toggler navbar-toggler-right" type="button" data-bs-toggle="collapse" data-bs-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+                <button id="menu_button" class="navbar-toggler navbar-toggler-right" type="button" data-bs-toggle="collapse" data-bs-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
                     Menu
                     <i class="fas fa-bars"></i>
                 </button>
@@ -128,7 +114,7 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form action="./index.php" method="post">
+                    <form id="login_form">
                         <div class="mb-3">
                             <label for="lemail" class="form-label">Email address</label>
                             <input type="email" class="form-control" id="lemail" aria-describedby="emailHelp" name="lemail" required>
@@ -140,7 +126,7 @@
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                            <button type="submit" class="btn btn-primary">Log In</button>
+                            <button id="login_btn" type="button" class="btn btn-primary">Log In</button>
                         </div>
                     </form>
                 </div>
@@ -155,42 +141,44 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form class="row" action="./index.php" method="post">
-                        <div class="mb-3 col-md-6">
-                            <label for="name" class="form-label">First Name</label>
-                            <input type="text" class="form-control" id="name" aria-describedby="emailHelp" name="name" required>
-                        </div>
-                        <div class="mb-3 col-md-6">
-                            <label for="last_name" class="form-label">Last Name</label>
-                            <input type="text" class="form-control" id="last_name" name="last_name" required>
-                        </div>
-                        <div class="mb-3 col-md-6">
-                            <label for="username" class="form-label">Username</label>
-                            <input type="text" class="form-control" id="last_name" name="username" required>
-                        </div>
-                        <div class="mb-3 col-md-6">
-                            <label for="email" class="form-label">Email Address</label>
-                            <input type="email" class="form-control" id="email" name="email" required>
-                        </div>
-                        <div class="mb-3 col-md-6">
-                            <label for="phone" class="form-label">Phone</label>
-                            <input type="number" class="form-control" id="email" name="phone" required>
-                        </div>
-                        <div class="mb-3 col-md-6">
-                            <label for="roll_no" class="form-label">Address</label>
-                            <input type="text" class="form-control" id="address" name="address" required>
-                        </div>
-                        <div class="mb-3 col-md-6">
-                            <label for="password" class="form-label">Password</label>
-                            <input type="password" class="form-control" id="password" name="password" required>
-                        </div>
-                        <div class="mb-3 col-md-6">
-                            <label for="cpassword" class="form-label">Confirm Password</label>
-                            <input type="password" class="form-control" id="cpassword" name="cpassword" required>
+                    <form id="sign_up_form">
+                        <div class="row">
+                            <div class="mb-3 col-md-6">
+                                <label for="name" class="form-label">First Name</label>
+                                <input type="text" class="form-control" id="first_name" aria-describedby="emailHelp" name="name" required>
+                            </div>
+                            <div class="mb-3 col-md-6">
+                                <label for="last_name" class="form-label">Last Name</label>
+                                <input type="text" class="form-control" id="last_name" name="last_name" required>
+                            </div>
+                            <div class="mb-3 col-md-6">
+                                <label for="username" class="form-label">Username</label>
+                                <input type="text" class="form-control" id="username" name="username" required>
+                            </div>
+                            <div class="mb-3 col-md-6">
+                                <label for="email" class="form-label">Email Address</label>
+                                <input type="email" class="form-control" id="email" name="email" required>
+                            </div>
+                            <div class="mb-3 col-md-6">
+                                <label for="phone" class="form-label">Phone</label>
+                                <input type="number" class="form-control" id="phone" name="phone" required>
+                            </div>
+                            <div class="mb-3 col-md-6">
+                                <label for="roll_no" class="form-label">Address</label>
+                                <input type="text" class="form-control" id="address" name="address" required>
+                            </div>
+                            <div class="mb-3 col-md-6">
+                                <label for="password" class="form-label">Password</label>
+                                <input type="password" class="form-control" id="password" name="password" required>
+                            </div>
+                            <div class="mb-3 col-md-6">
+                                <label for="cpassword" class="form-label">Confirm Password</label>
+                                <input type="password" class="form-control" id="cpassword" name="cpassword" required>
+                            </div>
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                            <button type="submit" class="btn btn-primary">Sign Up</button>
+                            <button id="sign_up_btn" type="button" class="btn btn-primary">Sign Up</button>
                         </div>
                     </form>
                 </div>
@@ -300,5 +288,155 @@
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
         <!-- Core theme JS-->
         <script src="js/scripts.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
     </body>
+    <script>
+        window.addEventListener('DOMContentLoaded', event => {
+
+            // sign form submission 
+            let signUp_button = document.getElementById("sign_up_btn")
+            signUp_button.addEventListener("click",async function(e){
+                // e.preventDefault();
+
+                let sign_up_form = document.getElementById("sign_up_form");
+                let formData = new FormData(sign_up_form);
+
+                if(first_name.value == ""){
+                    swal("Warning!","Please Enter First Name!","warning")
+                    first_name.focus();
+                }
+                else if(last_name.value == ""){
+                    swal("Warning!","Please Enter Last Name!","warning")
+                    last_name.focus();
+                }
+                else if(username.value == ""){
+                    swal("Warning!","Please Enter Username!","warning")
+                    username.focus();
+                }
+                else if(email.value == ""){
+                    swal("Warning!","Please Enter Email!","warning")
+                    email.focus();
+                }
+                else if(!validateEmail(email.value)){
+                    swal("Warning!","Please Enter Valid Email!","warning")
+                    email.focus();
+                }
+                else if(phone.value == ""){
+                    swal("Warning!","Please Enter Phone Number!","warning")
+                    phone.focus();
+                }
+                else if(!isValidPhone(phone.value)){
+                    swal("Warning!","Please Enter Valid Phone Number!","warning")
+                    phone.focus();
+                }
+                else if(address.value == ""){
+                    swal("Warning!","Please Enter Address!","warning")
+                    address.focus();
+                }
+                else if(password.value == ""){
+                    swal("Warning!","Please Enter Password!","warning")
+                    password.focus();
+                }
+                else if(password.value.length<8){
+                    swal("Warning!","The Password Must Be at Least 8 Characters Long. Please Make Sure Your Password Meets This Requirement!","warning")
+                    password.focus();
+                }
+                else if(!checkPassword(password.value)){
+                    swal("Warning!","The Password Must Be at Least 8 Characters Long and Contain at Least One Lowercase Letter, One Uppercase Letter, One Digit, and One Special Character (!@#$%^&*). Please Make Sure Your Password Meets These Requirements!","warning")
+                    password.focus();
+                }
+                else if(password.value != cpassword.value){
+                    swal("Warning!","The Passwords Entered Do Not Match. Please Verify That You Have Entered the Same Password in Both Fields!","warning")
+                    password.focus();
+                }
+                else if(cpassword.value == ""){
+                    swal("Warning!","Please Enter Confirm Password!","warning")
+                    cpassword.focus();
+                }
+                else{
+                    formData.append('first_name',first_name.value)
+                    formData.append('last_name',last_name.value)
+                    formData.append('username',username.value)
+                    formData.append('email',email.value)
+                    formData.append('phone',phone.value)
+                    formData.append('address',address.value)
+                    formData.append('password',password.value)
+                    formData.append('cpassword',cpassword.value)
+                    let fetch_res = await fetch("index.php",{
+                        method:"POST",
+                        body:formData
+                    })
+                    let json_res = await fetch_res.json();
+                    if(json_res.status){
+                        sign_up_form.reset();
+                        swal("Success!",json_res.message,"success").
+                        then(()=>{
+                            location.reload();
+                        })
+                    }
+                    else{
+                        swal("Error!",json_res.message,"error")
+                    }
+                }
+            })
+
+            // Login form submission
+            let login_button = document.getElementById("login_btn")
+            login_button.addEventListener("click",async function(e){
+                // e.preventDefault();
+
+                let login_form = document.getElementById("login_form");
+                let formData = new FormData(sign_up_form);
+
+                if(lemail.value == ""){
+                    swal("Warning!","Please Enter Email!","warning")
+                    lemail.focus();
+                }
+                else if(lpassword.value == ""){
+                    swal("Warning!","Please Enter Password!","warning")
+                    lpassword.focus();
+                }
+                else{
+                    formData.append('lemail',lemail.value)
+                    formData.append('lpassword',lpassword.value)
+                    let fetch_res = await fetch("index.php",{
+                        method:"POST",
+                        body:formData
+                    })
+                    let json_res = await fetch_res.json();
+                    if(json_res.status){
+                        swal("Success!",json_res.message,"success").
+                        then(()=>{
+                            location.reload();
+                        })
+                        login_form.reset();
+                    }
+                    else{
+                        swal("Error!",json_res.message,"error")
+                        login_form.reset();
+                    }
+                }
+            })
+        })
+
+        // Phone Number Expression 
+        function isValidPhone(p_number) {
+            var phoneRe = /^[2-9]\d{2}[2-9]\d{2}\d{4}$/;
+            var digits = p_number.replace(/\D/g, "");
+            return phoneRe.test(digits);
+        }
+
+        // Email Address Expression
+        const validateEmail = (email) => {
+            return email.match(
+                /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+            );
+        };
+
+        // Password Expression 
+        function checkPassword(password){
+            let pattern = /^(?=.*\d)(?=.*[!@#$%^&*])(?=.*[a-z])(?=.*[A-Z]).{8,}$/;
+            return pattern.test(password);
+        }
+    </script>
 </html>
