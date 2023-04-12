@@ -81,6 +81,15 @@
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script>
         <link href="css/styles.css" rel="stylesheet" />
         <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+        <style>
+            .password-eye{
+                float: right;
+                margin-right: 8px;
+                margin-top: -25px;
+                position: relative;
+                /* z-index: 2; */
+            }
+        </style>
     </head>
     <body id="page-top">
         <!-- Navigation-->
@@ -166,14 +175,17 @@
                             <div class="mb-3 col-md-6">
                                 <label for="roll_no" class="form-label">Address</label>
                                 <input type="text" class="form-control" id="address" name="address" required>
+                                
                             </div>
                             <div class="mb-3 col-md-6">
                                 <label for="password" class="form-label">Password</label>
                                 <input type="password" class="form-control" id="password" name="password" required>
+                                <img toggle="#password" src="./assets/img/eye-open.png" alt="" class="password-eye" style="width:25px;cursor:pointer;">
                             </div>
                             <div class="mb-3 col-md-6">
                                 <label for="cpassword" class="form-label">Confirm Password</label>
                                 <input type="password" class="form-control" id="cpassword" name="cpassword" required>
+                                <img toggle="#cpassword" src="./assets/img/eye-open.png" alt="" class="password-eye" style="width:25px;cursor:pointer;">
                             </div>
                         </div>
                         <div class="modal-footer">
@@ -292,6 +304,23 @@
     </body>
     <script>
         window.addEventListener('DOMContentLoaded', event => {
+
+            // password eye toggle 
+            $(".password-eye").click(function () {
+				let src = this.getAttribute("src");
+                if(src == "./assets/img/eye-open.png"){
+                    this.setAttribute("src","./assets/img/eye-close.png")
+                }
+                else{
+                    this.setAttribute("src","./assets/img/eye-open.png")
+                }
+				let input = $($(this).attr("toggle"));
+				if (input.attr("type") == "password") {
+					input.attr("type", "text");
+				} else {
+					input.attr("type", "password");
+				}
+			});
 
             // sign form submission 
             let signUp_button = document.getElementById("sign_up_btn")
