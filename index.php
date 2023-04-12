@@ -85,7 +85,8 @@
                 </script>
 
             <?php else:
-                    mysqli_query($db,"INSERT INTO `USERS` VALUES('$_POST[name]', '$_POST[last_name]', '$_POST[username]', '$_POST[password]', '$_POST[roll_no]', '$_POST[phone]', '$_POST[email]');");?>
+                    mysqli_query($db,"INSERT INTO `USERS` (`first_name`, `last_name`,`username`,`password`,`address`,`phone_no`,`email_address`) VALUES('$_POST[name]', '$_POST[last_name]', '$_POST[username]', '$_POST[password]', '$_POST[address]', '$_POST[phone]', '$_POST[email]');");
+                    ?>
                     <script>
                         setTimeout(() => {
                             swal("Success!", "Sign Up Successfully Now You Can Log In!", "success");
@@ -123,7 +124,7 @@
             <div class="modal-dialog">
                 <div class="modal-content">
                 <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="exampleModalLabel">Modal title</h1>
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">Login</h1>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
@@ -150,7 +151,7 @@
             <div class="modal-dialog modal-lg">
                 <div class="modal-content">
                 <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="exampleModalLabel">Modal title</h1>
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">Sign Up</h1>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
@@ -176,8 +177,8 @@
                             <input type="number" class="form-control" id="email" name="phone" required>
                         </div>
                         <div class="mb-3 col-md-6">
-                            <label for="roll_no" class="form-label">Roll No.</label>
-                            <input type="number" class="form-control" id="roll_no" name="roll_no" required>
+                            <label for="roll_no" class="form-label">Address</label>
+                            <input type="text" class="form-control" id="address" name="address" required>
                         </div>
                         <div class="mb-3 col-md-6">
                             <label for="password" class="form-label">Password</label>
