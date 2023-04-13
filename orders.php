@@ -105,7 +105,7 @@
         </div>
     </nav>
     <main>
-        <div class="album py-5 bg-light">
+        <div class="album py-5 bg-light" style="height:100vh;">
             <div class="container">
                 <a href="welcome.php" class="btn btn-primary m-4">&#x2190; Back</a>
                 <a href="books.php" class="btn btn-warning m-4">Order Books</a>
@@ -117,9 +117,8 @@
 
                     $res=mysqli_query($db,"select user_id FROM `users`;");
                     $user_id = $res->fetch_row()[0];
-                    $sql = "select * from orders where user_id = $user_id and status != '2';";
 
-                    $res=mysqli_query($db,"select * from orders where user_id = $user_id and status != '2';");
+                    $res=mysqli_query($db,"select * from orders where user_id = $user_id and status != '3';");
 
                     $rowcount=mysqli_num_rows($res);
                     
@@ -206,7 +205,7 @@
 </script>
 <?php if(isset($_POST['order_id'])){
             require('./db/conn.php');
-            $res = mysqli_query($db,"UPDATE `orders` SET `status` = '2' WHERE `id` = '$_POST[order_id]'");
+            $res = mysqli_query($db,"UPDATE `orders` SET `status` = '3' WHERE `id` = '$_POST[order_id]'");
             if($res){?>
             <script>
                 setTimeout(() => {

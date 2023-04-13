@@ -132,7 +132,7 @@
         </div>
     </nav>
     <main>
-        <div class="album py-5 bg-light">
+        <div class="album py-5 bg-light" style="height:100vh;">
             <div class="container">
                 <a href="welcome.php" class="btn btn-primary m-4">&#x2190; Back</a>
                 <a href="orders.php" class="btn btn-warning m-4">View Your Orders</a>
@@ -146,8 +146,8 @@
                         <div class="card shadow-sm">
                             <img class="w-100" src="./admin/<?=$row['image_path']?>" alt="book image">
                             <div class="card-body">
-                                <p class="card-text">Book Name : <?= $row['book_name'] ?></p>
-                                <p class="card-text">Status :<?php if(!$row['quantity']< 1){echo "Available";}else{echo"Unavailable";}?></p>
+                                <p class="card-text"><b>Book Name :</b> <?= $row['book_name'] ?></p>
+                                <div class="card-text"><b>Book Description :</b> <p><?=  substr($row['description'], 0, 100)."...";?></p></div>
                                 <div class="d-flex justify-content-between align-items-center">
                                 <?php if($row['quantity'] < 1){?>
                                     <div class="btn-group">

@@ -159,9 +159,20 @@
                                             <td>
 
                                             <select data-id="<?=$row['id']?>" class="form-select select" id="book_status">
-                                                <option <?php if($row['status']== "0"){echo "selected";}?> value="0">Pending</option>
-                                                <option <?php if($row['status']== "1"){echo "selected";}?> value="1">Approve</option>
-                                                <option <?php if($row['status']== "2"){echo "selected";}?> value="2">Deline</option>
+                                                <?php if($row['status'] == 0){ ?>
+                                                    <option selected value="0" class="text-warning">Pending</option>
+                                                    <option  value="1" class="text-success">Approve</option>
+                                                    <option  value="2" class="text-danger">Deline</option>
+                                                <?php } else if($row['status'] == 1){ ?>
+                                                    <option selected value="1" class="text-success">Approved</option>
+                                                    <option  value="2" class="text-danger">Deline</option>
+                                                    <option  value="3" class="text-primary">complete</option>
+                                                <?php } else if($row['status'] == 2){ ?>
+                                                    <option selected value="2" class="text-danger">Delined</option>
+                                                    <option  value="1" class="text-success">Approve</option>
+                                                <?php } else if($row['status'] == 3){ ?>
+                                                    <option selected value="3" class="text-primary">completed</option>
+                                                <?php } ?>
                                             </select>
                                             </td>
                                         </tr>
@@ -194,7 +205,7 @@
                     element.addEventListener("change",async function(e){
                         let order_id = this.getAttribute("data-id")
                         let data = new FormData();
-                        let book_status_val = document.getElementById("book_status")
+                        let book_status_val = this;
                         data.append("order_id",order_id)
                         data.append("book_status",book_status_val.value)
                         let response = await fetch("manage-orders.php",{
@@ -203,7 +214,9 @@
                         })
                         let json_res = await response.json();
                         if(json_res.status){
-                            swal('Success!',json_res.message,'success')
+                            swal('Success!',json_res.message,'success').then(()=>{
+                                location.reload();
+                            })
                         }
                         else{
                             swal('Error!',json_res.message,'error')
