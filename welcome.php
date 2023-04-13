@@ -5,7 +5,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
         <meta name="description" content="" />
         <meta name="author" content="" />
-        <title>Grayscale - Start Bootstrap Theme</title>
+        <title>Library Management</title>
         <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
         <!-- Font Awesome icons (free version)-->
         <script src="https://use.fontawesome.com/releases/v6.1.0/js/all.js" crossorigin="anonymous"></script>
@@ -74,7 +74,7 @@
                                     <div class="btn-group">
                                         <a href="books.php" type="button" class="btn btn-sm btn-success">View Books</a>
                                     </div>
-                                    <small class="text-muted">9 mins</small>
+                                    <!-- <small class="text-muted">9 mins</small> -->
                                 </div>
                             </div>
                         </div>
@@ -89,7 +89,7 @@
                                     <div class="btn-group">
                                         <a href="./orders.php" type="button" class="btn btn-sm btn-success">View Orders</a>
                                     </div>
-                                    <small class="text-muted">9 mins</small>
+                                    <!-- <small class="text-muted">9 mins</small> -->
                                 </div>
                             </div>
                         </div>

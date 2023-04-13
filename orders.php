@@ -5,7 +5,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
         <meta name="description" content="" />
         <meta name="author" content="" />
-        <title>Grayscale - Start Bootstrap Theme</title>
+        <title>Library | Orders </title>
         <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
         <!-- Font Awesome icons (free version)-->
         <script src="https://use.fontawesome.com/releases/v6.1.0/js/all.js" crossorigin="anonymous"></script>
@@ -133,12 +133,26 @@
                             <img src="./assets/img/order.jpg" alt="order image">
                             <div class="card-body">
                                 <p class="card-text">Book Name : <?= $book_name ?></p>
+
+                                <?php 
+
+                                $timestamp = strtotime($row['to_date']);
+                                $current_timestamp = time();
+                                
+                                if (date('Y-m-d', $current_timestamp) == date('Y-m-d', $timestamp)) { ?>
+                                    <p class="card-text text-warning">Dear patron, this is a friendly reminder that the due date for your borrowed book is today.</p>
+                                    <?php } else if($current_timestamp > $timestamp) { ?>
+                                    <p class="card-text text-danger">Please return the book promptly.</p>
+                                    <?php }else{?>
+                                        <!-- <p class="card-text text-success">HI</p> -->
+                                <?php }?>
+
                                 <p class="card-text">Status : <span class="<?php if($row['status'] == 0){echo "text-warning";}else if($row['status'] == 1){echo "text-success";}else{echo "text-danger";} ?>"><?php if($row['status'] == 0){echo "Pending";}else if($row['status'] == 1){echo "Approved";}else{echo "Declined";} ?></span></p>
                                 <div class="d-flex justify-content-between align-items-center">
                                     <div class="btn-group">
                                         <button data-id="<?= $row['id'] ?>" data-status="<?php if($row['status'] == 0){echo "Pending";}else if($row['status'] == 1){echo "Approved";}else{echo "Declined";}  ?>" data-to="<?= $row['to_date']?>" data-from="<?= $row['from_date'];?>" data-name="<?= $book_name ?>" data-bs-toggle="modal" data-bs-target="#bookModal" data-id="" type="button" class="p-3 text-light bg-success btn btn-sm btn-outline-secondary order-button">View Order Details</button>
                                     </div>
-                                    <small class="text-muted">9 mins</small>
+                                    <!-- <small class="text-muted">9 mins</small> -->
                                 </div>
                             </div>
                         </div>

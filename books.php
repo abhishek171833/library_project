@@ -1,3 +1,31 @@
+<?php 
+    session_start();
+    if(isset($_POST['book_id'])){
+            require('./db/conn.php');
+            $user_email = $_SESSION['login_user'];
+            $result = mysqli_query($db,"select user_id from users");
+            $user_id = $result->fetch_row()[0];
+
+            mysqli_query($db,"INSERT INTO `orders` (`user_id`, `book_id`,`from_date`,`to_date`,`datetime`) VALUES ('$user_id', '$_POST[book_id]','$_POST[from_date]','$_POST[to_date]', current_timestamp());");
+
+            $count = mysqli_query($db,"UPDATE `books` SET `quantity` = `quantity` - 1 WHERE `id` = '$_POST[book_id]' AND `quantity` > 0;");
+
+
+            if($count){
+                $message['status'] = 1;
+                $message['message'] = "Book Orderd Successfully!";
+                echo json_encode($message);
+                exit();
+            }
+            else{
+                $message['status'] = 0;
+                $message['message'] = "Something Went Wrong!";
+                echo json_encode($message);
+                exit();
+
+            }
+     } ?>
+
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -5,7 +33,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
         <meta name="description" content="" />
         <meta name="author" content="" />
-        <title>Grayscale - Start Bootstrap Theme</title>
+        <title>Library | Books</title>
         <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
         <!-- Font Awesome icons (free version)-->
         <script src="https://use.fontawesome.com/releases/v6.1.0/js/all.js" crossorigin="anonymous"></script>
@@ -23,13 +51,18 @@
         <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
         <script>
             $( function() {
-                $("#datepicker" ).datepicker({ minDate: 0});
+                $("#datepicker").datepicker({
+                    minDate: 0,
+                    onSelect: function(selectedDate) {
+                    // Set the minDate option of the second datepicker to the selected date of the first datepicker
+                    $("#datepicker2").datepicker("option", "minDate", selectedDate);
+                    }
+                });
                 $("#datepicker2" ).datepicker({ minDate:0 });
             } );
         </script>
     </head>
     <?php 
-    session_start();
     if(isset($_SESSION['login_user'])){ ?>
     <body>
     <div class="modal fade" id="bookModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -40,7 +73,7 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form id="order_form" action="books.php" method="post">
+                <form id="order_form">
                     <input type="hidden" id="book_id" name="book_id">
                     <div class="mb-3">
                         <label for="book_name" class="form-label">Book Name</label>
@@ -125,7 +158,7 @@
                                         <button data-name="<?= $row['book_name']?>" data-bs-toggle="modal" data-bs-target="#bookModal" data-id="<?= $row['id']?>" type="button" class="p-3 text-light bg-success btn btn-sm btn-outline-secondary order-button">Oder book</button>
                                     </div>
                                 <?php } ?>
-                                    <small class="text-muted">9 mins</small>
+                                    <!-- <small class="text-muted">9 mins</small> -->
                                 </div>
                             </div>
                         </div>
@@ -161,40 +194,39 @@
                 book_name.value = book
                 book_id_el.value = book_id
                 let order_but = document.getElementById("order-book")
-                order_but.addEventListener("click",function(e){
+                order_but.addEventListener("click",async function(e){
                     e.preventDefault();
+                    let book_order_form = document.getElementById("order_form");
+                    let formData = new FormData(book_order_form);
                     let from_date = document.getElementById("datepicker")
                     let to_date = document.getElementById("datepicker2")
                     if(from_date.value == "" || to_date.value == ""){
                         swal("Error!", "Please Choose Date", "error")
                     }
                     else{
-                        let order_form = document.getElementById("order_form")
-                        console.log(order_form)
-                        order_form.submit();
+                        formData.append('book_id',book_id)
+                        formData.append('from_date',from_date.value)
+                        formData.append('to_date',to_date.value)
+
+                        let fetch_res = await fetch("books.php",{
+                            method:"POST",
+                            body:formData
+                        })
+                        let json_res = await fetch_res.json();
+                        if(json_res.status){
+                            book_order_form.reset();
+                            swal("Success!",json_res.message,"success").
+                            then(()=>{
+                                location.reload();
+                            })
+                        }
+                        else{
+                            swal("Error!",json_res.message,"error")
+                        }
                     }
                 })
             })
         });
-        // let order_book = document.getElementById("order-book")
-        // order_book.addEventListener("click",function(){
-        //     let val = document.getElementById("datepicker")
-        //     console.log(parseInt(val.value.substr(3,6)))
-        // })
     });
+
 </script>
-<?php if(isset($_POST['book_id'])){
-            require('./db/conn.php');
-            $user_email = $_SESSION['login_user'];
-            $result = mysqli_query($db,"select user_id from users");
-            $user_id = $result->fetch_row()[0];
-            mysqli_query($db,"INSERT INTO `orders` (`user_id`, `book_id`,`from_date`,`to_date`,`datetime`) VALUES ('$user_id', '$_POST[book_id]','$_POST[from_date]','$_POST[to_date]', current_timestamp());");
-            unset($_POST['book_id']);
-            ?>
-            <script>
-                setTimeout(() => {
-                    swal("Success!", "Book Orderd Successfully", "success")
-                },);
-            </script>
-        <?php } ?>
-<?php ?>
