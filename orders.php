@@ -21,14 +21,6 @@
         <link rel="stylesheet" href="/resources/demos/style.css">
         <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
         <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
-        <script>
-            // $( function() {
-            //     $("#datepicker" ).datepicker({ minDate: 0});
-            //     $("#datepicker2" ).datepicker({ minDate:0 });
-            //     // $("#datepicker2" ).datepicker({ minDate:'+4d' });
-            //     // $("#datepicker" ).datepicker();
-            // } );
-        </script>
     </head>
     <?php 
     session_start();
@@ -70,8 +62,8 @@
                     </div>
 
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                         <button id="order-book" class="btn btn-primary">Cancel Order</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                     </div>
                 </form>
             </div>
@@ -137,6 +129,13 @@
 
                                 $timestamp = strtotime($row['to_date']);
                                 $current_timestamp = time();
+
+                                $date=date_create($row['to_date']);
+                                $row['to_date'] = date_format($date,"d/M/Y");
+
+                                $date=date_create($row['from_date']);
+                                $row['from_date'] = date_format($date,"d/M/Y");
+
                                 
                                 if (date('Y-m-d', $current_timestamp) == date('Y-m-d', $timestamp)) { ?>
                                     <p class="card-text text-warning">Dear patron, this is a friendly reminder that the due date for your borrowed book is today.</p>

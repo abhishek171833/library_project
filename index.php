@@ -132,6 +132,7 @@
                         <div class="mb-3">
                             <label for="lpassword" class="form-label">Password</label>
                             <input type="password" class="form-control" id="lpassword" name="lpassword" required>
+                            <img toggle="#lpassword" src="./assets/img/eye-open.png" alt="" class="password-eye" style="width:25px;cursor:pointer;">
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -237,16 +238,16 @@
 
     <!-- Right -->
     <div>
-      <a class="footer-icon p-2" href="youtube.com">
+      <a class="footer-icon p-2" href="https://facebook.com" target="_blank">
         <i class="fab fa-facebook-f"></i>
       </a>
-      <a class="footer-icon p-2" href="youtube.com">
+      <a class="footer-icon p-2" href="https://twitter.com" target="_blank">
         <i class="fab fa-twitter"></i>
       </a>
-      <a class="footer-icon p-2" href="youtube.com">
+      <a class="footer-icon p-2" href="https://instagram.com" target="_blank">
         <i class="fab fa-instagram"></i>
       </a>
-      <a class="footer-icon p-2" href="youtube.com">
+      <a class="footer-icon p-2" href="https://linkedin.com" target="_blank">
         <i class="fab fa-linkedin"></i>
       </a>
     </div>
@@ -272,10 +273,10 @@
         <div class="col-md-6 mx-auto mb-md-0 mb-4 text-center">
           <!-- Links -->
           <h6 class="text-uppercase fw-bold mb-4">Contact</h6>
-          <p><i class="fas fa-home me-3 text-secondary"></i> New York, NY 10012, US</p>
+          <p><i class="fas fa-home me-3 text-secondary"></i> Mumbai, NY 10012, IN</p>
           <p>
             <i class="fas fa-envelope me-3 text-secondary"></i>
-            info@example.com
+            library@management.com
           </p>
           <p><i class="fas fa-phone me-3 text-secondary"></i> + 01 234 567 88</p>
           <p><i class="fas fa-print me-3 text-secondary"></i> + 01 234 567 89</p>
@@ -289,7 +290,7 @@
 
   <!-- Copyright -->
   <div class="text-center p-4" style="background-color: rgba(0, 0, 0, 0.025);">
-    © 2021 Copyright:
+    © 2023 Copyright:
     <a class="text-reset fw-bold" >Library Management</a>
   </div>
   <!-- Copyright -->

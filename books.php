@@ -49,18 +49,6 @@
         <link rel="stylesheet" href="/resources/demos/style.css">
         <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
         <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
-        <script>
-            $( function() {
-                $("#datepicker").datepicker({
-                    minDate: 0,
-                    onSelect: function(selectedDate) {
-                    // Set the minDate option of the second datepicker to the selected date of the first datepicker
-                    $("#datepicker2").datepicker("option", "minDate", selectedDate);
-                    }
-                });
-                $("#datepicker2" ).datepicker({ minDate:0 });
-            } );
-        </script>
     </head>
     <?php 
     if(isset($_SESSION['login_user'])){ ?>
@@ -85,14 +73,14 @@
                             <div class="input-group-prepend mb-1">
                                 <span class="input-group-text" id="basic-addon1">From</span>
                             </div>
-                            <input class="form-control" id="datepicker" name="from_date">
+                            <input type="date" class="form-control" id="datepicker" name="from_date" onchange="setMinDate();">
                         </div>
     
                         <div class="col-md-6 mb-2">
                             <div class="input-group-prepend mb-1">
                                 <span class="input-group-text" id="basic-addon1">To</span>
                             </div>
-                            <input class="form-control" id="datepicker2" name="to_date">
+                            <input type="date" class="form-control" id="datepicker2" name="to_date">
                         </div>
                     </div>
 
@@ -183,6 +171,7 @@
 <?php }?>
 <script>
     document.addEventListener("DOMContentLoaded", () => {
+        setMinDateOnFirstDate();
         let order_button = document.querySelectorAll(".order-button")
         order_button.forEach(element => {
             element.addEventListener("click",function(){
@@ -200,8 +189,11 @@
                     let formData = new FormData(book_order_form);
                     let from_date = document.getElementById("datepicker")
                     let to_date = document.getElementById("datepicker2")
-                    if(from_date.value == "" || to_date.value == ""){
-                        swal("Error!", "Please Choose Date", "error")
+                    if(from_date.value == ""){
+                        swal("Error!", "Please Choose Order Date", "error")
+                    }
+                    else if(to_date.value == ""){
+                        swal("Error!", "Please Choose Return Date", "error")
                     }
                     else{
                         formData.append('book_id',book_id)
@@ -228,5 +220,25 @@
             })
         });
     });
+
+    // Set the to date from the from date on user selection 
+    function setMinDate() {
+        // Get the value of the first input field
+        const date1 = document.getElementById("datepicker").value;
+        
+        // Set the minimum date for the second input field to the selected date in the first input field
+        document.getElementById("datepicker2").setAttribute("min", date1);
+
+    }
+    function setMinDateOnFirstDate(){
+        // Get today's date and format it as a string
+        const today = new Date();
+        const dd = String(today.getDate()).padStart(2, '0');
+        const mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+        const yyyy = today.getFullYear();
+        const todayString = yyyy + '-' + mm + '-' + dd;
+        // Set the minimum date for the first input field to today's date
+        document.getElementById("datepicker").setAttribute("min", todayString);
+    }
 
 </script>
