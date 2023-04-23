@@ -110,7 +110,9 @@
                     $res=mysqli_query($db,"select user_id FROM `users`;");
                     $user_id = $res->fetch_row()[0];
 
-                    $res=mysqli_query($db,"select * from orders where user_id = $user_id and status != '3';");
+                    if($user_id){
+                        $res=mysqli_query($db,"select * from orders where user_id = $user_id and status != '3';");
+                    }
 
                     $rowcount=mysqli_num_rows($res);
                     

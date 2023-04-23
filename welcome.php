@@ -71,8 +71,7 @@
                 <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
                     <div class="col-md-6">
                         <div class="card shadow-sm">
-                            <img class="w-100" src="./assets/img/book_cover.jpg" alt="">
-
+                            <img class="w-100 rounded-top" src="./assets/img/book_cover.jpg" alt="">
                             <div class="card-body">
                                 <p class="card-text">Order Books</p>
                                 <div class="d-flex justify-content-between align-items-center">
@@ -86,8 +85,7 @@
                     </div>
                     <div class="col-md-6">
                         <div class="card shadow-sm">
-                            <img class="w-100" src="./assets/img/order.jpg" alt="">
-
+                            <img class="w-100 rounded-top" src="./assets/img/order.jpg" alt="">
                             <div class="card-body">
                                 <p class="card-text">View you orders</p>
                                 <div class="d-flex justify-content-between align-items-center">

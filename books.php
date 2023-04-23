@@ -120,7 +120,7 @@
         </div>
     </nav>
     <main>
-        <div class="album py-5 bg-light" style="height:100vh;">
+        <div class="album py-5 bg-light">
             <div class="container">
                 <a href="welcome.php" class="btn btn-primary m-4">&#x2190; Back</a>
                 <a href="orders.php" class="btn btn-warning m-4">View Your Orders</a>
@@ -132,7 +132,7 @@
                     while ($row = mysqli_fetch_assoc($query)){?>
                     <div class="col-md-4">
                         <div class="card shadow-sm">
-                            <img class="w-100" src="./admin/<?=$row['image_path']?>" alt="book image">
+                            <img class="w-100" src="./admin/<?=$row['image_path']?>" alt="book image" style="height:250px;">
                             <div class="card-body">
                                 <p class="card-text"><b>Book Name :</b> <?= $row['book_name'] ?></p>
                                 <div class="card-text"><b>Book Description :</b> <p><?=  substr($row['description'], 0, 100)."...";?></p></div>
